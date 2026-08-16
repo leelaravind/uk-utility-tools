@@ -90,9 +90,15 @@ export default function OvertimePage() {
             Time and a quarter (1.25×), time and a half (1.5×) and double time
             (2×) are the usual contractual rates. None of them is required by
             law — the legal floor is only that your average pay per hour
-            stays at or above the National Minimum Wage. Salaried staff often
-            have no paid overtime at all; check your contract before relying
-            on an estimate.
+            stays at or above the National Minimum Wage (see{" "}
+            <a
+              href="https://www.gov.uk/overtime-your-rights"
+              rel="noopener noreferrer"
+            >
+              GOV.UK — overtime: your rights
+            </a>
+            ). Salaried staff often have no paid overtime at all; check your
+            contract before relying on an estimate.
           </p>
         </>
       }

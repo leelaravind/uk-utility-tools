@@ -54,9 +54,10 @@ export default function AboutPage() {
       <p className={paragraph}>
         The tools run entirely in your browser. Calculations happen on your
         device; CVs, job descriptions, images, PDFs and invoice details are
-        processed locally and never uploaded. There are no accounts, no
-        analytics scripts and no advertising cookies. The full detail is in
-        our{" "}
+        processed locally and never uploaded. There are no accounts and no
+        analytics scripts. To keep everything free, the site shows adverts
+        via Google AdSense — advertising never sees what you type into the
+        tools. The full detail is in our{" "}
         <Link href="/privacy" className="text-accent underline underline-offset-2">
           privacy policy
         </Link>

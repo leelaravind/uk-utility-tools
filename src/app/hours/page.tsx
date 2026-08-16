@@ -87,6 +87,27 @@ export default function HoursPage() {
               £10/hour that is £145.00 gross.
             </li>
           </ul>
+          <h3>Working-time limits</h3>
+          <p>
+            If your weekly totals are regularly high, note that average
+            working time in the UK must not normally exceed 48 hours a week
+            (averaged over 17 weeks) unless you have opted out in writing —
+            see{" "}
+            <a
+              href="https://www.gov.uk/maximum-weekly-working-hours"
+              rel="noopener noreferrer"
+            >
+              GOV.UK — maximum weekly working hours
+            </a>
+            . Rest-break rules are summarised at{" "}
+            <a
+              href="https://www.gov.uk/rest-breaks-work"
+              rel="noopener noreferrer"
+            >
+              GOV.UK — rest breaks at work
+            </a>
+            .
+          </p>
         </>
       }
       disclaimer={

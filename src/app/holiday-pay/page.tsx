@@ -108,6 +108,24 @@ export default function HolidayPayPage() {
             weeks, handle mid-year starters and leavers, or apply contractual
             extras — so treat the results as approximate.
           </p>
+          <p>
+            The rules above come from official guidance: see{" "}
+            <a
+              href="https://www.gov.uk/holiday-entitlement-rights"
+              rel="noopener noreferrer"
+            >
+              GOV.UK — holiday entitlement rights
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://www.gov.uk/guidance/calculating-holiday-pay-for-workers-without-fixed-hours-or-pay"
+              rel="noopener noreferrer"
+            >
+              GOV.UK — calculating holiday pay for workers without fixed
+              hours or pay
+            </a>{" "}
+            (both checked 16 August 2026).
+          </p>
         </>
       }
       disclaimer={

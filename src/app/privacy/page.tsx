@@ -80,6 +80,35 @@ export default function PrivacyPage() {
         advertising cookies are used. Advertising never sees what you type
         into the tools — that stays on your device.
       </p>
+      <p className={paragraph}>
+        Third-party vendors, including Google, use cookies to serve ads
+        based on a user&rsquo;s prior visits to this website or other
+        websites. Google&rsquo;s use of advertising cookies enables it and
+        its partners to serve ads to you based on your visits to this site
+        and/or other sites on the internet.
+      </p>
+      <p className={paragraph}>
+        You may opt out of personalised advertising by visiting{" "}
+        <a
+          href="https://adssettings.google.com"
+          rel="noopener noreferrer"
+          target="_blank"
+          className="text-accent underline underline-offset-2"
+        >
+          Google Ads Settings
+        </a>
+        , and opt out of some other third-party vendors&rsquo; use of
+        cookies for personalised advertising by visiting{" "}
+        <a
+          href="https://www.aboutads.info/choices"
+          rel="noopener noreferrer"
+          target="_blank"
+          className="text-accent underline underline-offset-2"
+        >
+          www.aboutads.info/choices
+        </a>
+        .
+      </p>
 
       <h2 className={sectionHeading}>Hosting and server logs</h2>
       <p className={paragraph}>
@@ -101,8 +130,8 @@ export default function PrivacyPage() {
 
       <h2 className={sectionHeading}>Changes to this policy</h2>
       <p className={paragraph}>
-        If the way the site works changes — for example, if a future version
-        adds privacy-respecting analytics or advertising — this page will be
+        If the way the site works changes — for example, if the site adds
+        analytics or changes how advertising works — this page will be
         updated first, in the same plain language. The description above
         matches how the site actually works today.
       </p>
