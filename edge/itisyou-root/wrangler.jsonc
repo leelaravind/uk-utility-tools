@@ -1,0 +1,15 @@
+{
+  // Root-domain edge worker for the ITISYOU network: landing page at
+  // itisyou.app/, ads.txt at itisyou.app/ads.txt, and www → apex redirect.
+  // Every other itisyou.app path continues to be served by the existing app.
+  // Deploy with: npx wrangler deploy --config edge/itisyou-root/wrangler.jsonc
+  "name": "itisyou-root-edge",
+  "compatibility_date": "2026-08-01",
+  "main": "index.js",
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "itisyou.app/", "zone_name": "itisyou.app" },
+    { "pattern": "itisyou.app/ads.txt", "zone_name": "itisyou.app" },
+    { "pattern": "www.itisyou.app", "custom_domain": true }
+  ]
+}
