@@ -1,0 +1,11 @@
+{
+  // Single-path worker: serves itisyou.app/ads.txt for AdSense verification.
+  // Deploy with: npx wrangler deploy --config edge/root-ads-txt/wrangler.jsonc
+  "name": "itisyou-root-ads-txt",
+  "compatibility_date": "2026-08-01",
+  "main": "index.js",
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "itisyou.app/ads.txt", "zone_name": "itisyou.app" }
+  ]
+}
