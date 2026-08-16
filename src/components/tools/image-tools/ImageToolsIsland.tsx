@@ -10,6 +10,7 @@ import {
   SelectInput,
 } from "@/components/ui";
 import {
+  ImageToolError,
   MAX_DIMENSION_PX,
   buildOutputFilename,
   compressToTarget,
@@ -124,7 +125,7 @@ export function ImageToolsIsland() {
       setFormat(defaultFormatFor(file.type));
     } catch (e) {
       setFileError(
-        e instanceof Error
+        e instanceof ImageToolError
           ? e.message
           : "Sorry — that image couldn't be read. Try JPG, PNG or WebP.",
       );
@@ -242,7 +243,7 @@ export function ImageToolsIsland() {
       });
     } catch (e) {
       setProcessError(
-        e instanceof Error
+        e instanceof ImageToolError
           ? e.message
           : "Sorry — the image couldn't be processed. Try a different format.",
       );

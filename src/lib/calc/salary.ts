@@ -303,6 +303,12 @@ export function computeTakeHome(
     incomeTaxPence + niPence + pensionPence + studentLoanPence + postgradPence;
   const takeHomeAnnualPence = grossPence - deductionsPence;
 
+  if (takeHomeAnnualPence < 0) {
+    warnings.push(
+      "These deductions add up to more than the salary, which real payroll would not allow — a pension contribution this large would be restricted so that NI and other deductions could still be paid. Treat the negative figure as a sign to reduce the pension input.",
+    );
+  }
+
   // --- Working pattern for daily/hourly ---
   const daysPerWeek =
     input.workingPattern?.daysPerWeek !== undefined &&

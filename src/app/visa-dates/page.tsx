@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 
 import { ToolLayout } from "@/components/ui";
+import { pageMetadata } from "@/lib/seo";
 import { getTool } from "@/lib/registry";
 import { VisaDatesTool } from "@/components/tools/visa-dates/VisaDatesTool";
 
-export const metadata: Metadata = {
-  title: "Visa Date Calculator — Days Remaining, Countdown & Reminders",
+export const metadata = pageMetadata({
+  title:
+    "Visa Date Calculator — Days Remaining, Countdown & Reminders",
   description:
     "Count the days remaining on a visa, see how much of the period has elapsed and download .ics calendar reminders. A date calculator only — not immigration advice.",
-  alternates: { canonical: "/visa-dates" },
-};
+  path: "/visa-dates",
+});
 
 const FAQS = [
   {

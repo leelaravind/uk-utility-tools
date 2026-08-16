@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 
 import { ToolLayout } from "@/components/ui";
+import { pageMetadata } from "@/lib/seo";
 import { getTool } from "@/lib/registry";
 import { JobAnswerTool } from "@/components/tools/job-answer/JobAnswerTool";
 
-export const metadata: Metadata = {
-  title: "Job Application Answer Helper — STAR Method Answer Builder",
+export const metadata = pageMetadata({
+  title:
+    "Job Application Answer Helper — STAR Method Answer Builder",
   description:
     "Build structured answers to job application and interview questions with STAR, technical, concise and motivation frameworks. Templates, not AI — nothing is uploaded.",
-  alternates: { canonical: "/job-answer" },
-};
+  path: "/job-answer",
+});
 
 const FAQS = [
   {

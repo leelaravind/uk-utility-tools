@@ -1,19 +1,19 @@
-import type { Metadata } from "next";
 
 import { SelfEmployedCalculator } from "@/components/tools/self-employed/SelfEmployedCalculator";
+import { pageMetadata } from "@/lib/seo";
 import { ToolLayout } from "@/components/ui";
 import { TAX_YEARS } from "@/config/ukTax";
 import { getTool } from "@/lib/registry";
 
 const defaultYear = TAX_YEARS[0];
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title:
     "Self-Employed Profit Calculator — Sole Trader Take-Home After Tax & NI",
   description:
     "Estimate sole trader profit from revenue and allowable expenses, with an illustrative UK income tax and Class 4 National Insurance estimate for 2026/27.",
-  alternates: { canonical: "/self-employed" },
-};
+  path: "/self-employed",
+});
 
 const gbp0 = new Intl.NumberFormat("en-GB", {
   style: "currency",

@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
 
 import { CreditCardCalculator } from "@/components/tools/credit-card/CreditCardCalculator";
+import { pageMetadata } from "@/lib/seo";
 import { ToolLayout } from "@/components/ui";
 import { getTool } from "@/lib/registry";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title:
     "Credit Card Payoff Calculator — How Long to Clear a Balance & Total Interest",
   description:
     "See how long a credit card balance takes to clear, the total interest you'd pay, and the monthly payment needed to be debt-free by a target date.",
-  alternates: { canonical: "/credit-card" },
-};
+  path: "/credit-card",
+});
 
 const FAQS = [
   {

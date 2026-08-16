@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 
 import { getTool } from "@/lib/registry";
+import { pageMetadata } from "@/lib/seo";
 import { ToolLayout } from "@/components/ui";
 import { HolidayPayCalculator } from "@/components/tools/holiday-pay/HolidayPayCalculator";
 
-export const metadata: Metadata = {
-  title: "Holiday Pay Estimator — 5.6 Weeks Rule & 12.07% Accrual",
+export const metadata = pageMetadata({
+  title:
+    "Holiday Pay Estimator — 5.6 Weeks Rule & 12.07% Accrual",
   description:
     "Estimate UK statutory holiday entitlement and its value: 5.6 weeks for regular hours (28-day cap) or 12.07% accrual for irregular and casual workers.",
-  alternates: { canonical: "/holiday-pay" },
-};
+  path: "/holiday-pay",
+});
 
 const FAQS = [
   {

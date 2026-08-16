@@ -217,3 +217,34 @@ describe("requiredMonthlyPayment (mode B)", () => {
     ).toBe(false);
   });
 });
+
+describe("suggested minimum payment is simulation-verified (regression)", () => {
+  function suggestionClears(balance: number, aprPercent: number) {
+    const fail = simulatePayoff(
+      { balance, aprPercent, monthlyPayment: 0.01 },
+      TODAY,
+    );
+    expect(fail.ok).toBe(false);
+    if (fail.ok) return;
+    expect(fail.suggestedMonthlyPence).not.toBeNull();
+    const retry = simulatePayoff(
+      { balance, aprPercent, monthlyPayment: (fail.suggestedMonthlyPence as number) / 100 },
+      TODAY,
+    );
+    expect(retry.ok).toBe(true);
+    if (retry.ok) expect(retry.months).toBeLessThanOrEqual(MAX_MONTHS);
+  }
+
+  it("suggestion exceeds first-month interest and clears: 2500 @ 29.5%", () => {
+    suggestionClears(2500, 29.5);
+  });
+  it("suggestion clears within the cap: 999.99 @ 9.9%", () => {
+    suggestionClears(999.99, 9.9);
+  });
+  it("suggestion clears: 50000 @ 34.9%", () => {
+    suggestionClears(50000, 34.9);
+  });
+  it("suggestion clears: 250 @ 19.9%", () => {
+    suggestionClears(250, 19.9);
+  });
+});

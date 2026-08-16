@@ -143,7 +143,7 @@ export const TOOLS: Tool[] = [
     title: "Holiday Pay Estimator",
     shortTitle: "Holiday Pay",
     description:
-      "Estimate holiday hours and holiday pay for hourly and part-time UK workers, including an average-earnings mode.",
+      "Estimate holiday hours and holiday pay for hourly and part-time UK workers, including a 12.07% accrual mode for irregular and casual hours.",
     category: "work-pay",
     keywords: [
       "holiday pay calculator",

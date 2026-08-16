@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 
 import { getTool } from "@/lib/registry";
+import { pageMetadata } from "@/lib/seo";
 import { ToolLayout } from "@/components/ui";
 import { OvertimeCalculator } from "@/components/tools/overtime/OvertimeCalculator";
 
-export const metadata: Metadata = {
-  title: "Overtime Pay Calculator — Time and a Half, Double Time & Custom Rates",
+export const metadata = pageMetadata({
+  title:
+    "Overtime Pay Calculator — Time and a Half, Double Time & Custom Rates",
   description:
     "Calculate overtime pay with time and a half, double time, a custom multiplier or a specific overtime rate. See normal pay, overtime pay and the weekly total.",
-  alternates: { canonical: "/overtime" },
-};
+  path: "/overtime",
+});
 
 const FAQS = [
   {

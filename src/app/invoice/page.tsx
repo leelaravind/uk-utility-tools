@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 
 import { getTool } from "@/lib/registry";
+import { pageMetadata } from "@/lib/seo";
 import { ToolLayout } from "@/components/ui";
 import { InvoiceIsland } from "@/components/tools/invoice/InvoiceIsland";
 
-export const metadata: Metadata = {
-  title: "Free Invoice Generator — Line Items, VAT & Print to PDF",
+export const metadata = pageMetadata({
+  title:
+    "Free Invoice Generator — Line Items, VAT & Print to PDF",
   description:
     "Create a clean professional invoice with line items, VAT and totals, then print or save it as a PDF. No account, no watermark — nothing stored on a server.",
-  alternates: { canonical: "/invoice" },
-};
+  path: "/invoice",
+});
 
 const FAQS = [
   {

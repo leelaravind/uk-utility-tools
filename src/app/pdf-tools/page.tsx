@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 
 import { getTool } from "@/lib/registry";
+import { pageMetadata } from "@/lib/seo";
 import { ToolLayout } from "@/components/ui";
 import { PdfToolsIsland } from "@/components/tools/pdf-tools/PdfToolsIsland";
 
-export const metadata: Metadata = {
-  title: "PDF Merge, Split, Reorder & Extract — Free & Private, In Your Browser",
+export const metadata = pageMetadata({
+  title:
+    "PDF Merge, Split, Reorder & Extract — Free & Private, In Your Browser",
   description:
     "Merge, split, reorder, extract and remove PDF pages for free. Everything runs locally in your browser — your files are never uploaded to a server.",
-  alternates: { canonical: "/pdf-tools" },
-};
+  path: "/pdf-tools",
+});
 
 const FAQS = [
   {

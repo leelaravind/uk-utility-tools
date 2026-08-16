@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 
 import { getTool } from "@/lib/registry";
+import { pageMetadata } from "@/lib/seo";
 import { ToolLayout } from "@/components/ui";
 import { CreatorToolsIsland } from "@/components/tools/creator-tools/CreatorToolsIsland";
 
-export const metadata: Metadata = {
-  title: "Creator Tools — Title Ideas, Hooks, Description Templates & Hashtag Organiser",
+export const metadata = pageMetadata({
+  title:
+    "Creator Tools — Title Ideas, Hooks, Description Templates & Hashtag Organiser",
   description:
     "Free template-based helpers for creators: video title variations, hook ideas, a YouTube description skeleton and a hashtag/keyword organiser. Runs in your browser.",
-  alternates: { canonical: "/creator-tools" },
-};
+  path: "/creator-tools",
+});
 
 const FAQS = [
   {

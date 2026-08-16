@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 
 import { getTool } from "@/lib/registry";
+import { pageMetadata } from "@/lib/seo";
 import { ToolLayout } from "@/components/ui";
 import { WorkingHoursCalculator } from "@/components/tools/hours/WorkingHoursCalculator";
 
-export const metadata: Metadata = {
-  title: "Working Hours Calculator — Timesheet, Breaks & Decimal Hours",
+export const metadata = pageMetadata({
+  title:
+    "Working Hours Calculator — Timesheet, Breaks & Decimal Hours",
   description:
     "Add up hours between start and finish times, subtract unpaid breaks and convert to decimal hours. Includes a weekly timesheet mode with optional pay.",
-  alternates: { canonical: "/hours" },
-};
+  path: "/hours",
+});
 
 const FAQS = [
   {

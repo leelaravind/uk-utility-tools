@@ -1,13 +1,14 @@
-import type { Metadata } from "next";
 
 import { SITE_NAME } from "@/lib/registry";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact",
+export const metadata = pageMetadata({
+  title:
+    "Contact",
   description:
     "Get in touch with UK Utility Tools — report a bug, flag an out-of-date figure or suggest a new tool. No forms, no accounts: just email.",
-  alternates: { canonical: "/contact" },
-};
+  path: "/contact",
+});
 
 /**
  * Placeholder contact address for v1 — may change as the project settles

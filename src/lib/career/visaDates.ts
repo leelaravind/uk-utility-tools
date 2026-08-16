@@ -148,16 +148,35 @@ function djb2Hex(input: string): string {
   return hash.toString(16);
 }
 
-/** Fold a content line at 74 octets with a leading space (RFC 5545 §3.1). */
+const OCTETS = new TextEncoder();
+
+/**
+ * Fold a content line to at most 75 octets per physical line (RFC 5545
+ * §3.1), counting UTF-8 octets — not UTF-16 code units — and never
+ * splitting inside a surrogate pair. Continuation lines start with a space
+ * (which counts towards their 75-octet budget).
+ */
 function foldLine(line: string): string[] {
-  if (line.length <= 74) return [line];
-  const parts: string[] = [line.slice(0, 74)];
-  let rest = line.slice(74);
-  while (rest.length > 73) {
-    parts.push(" " + rest.slice(0, 73));
-    rest = rest.slice(73);
+  const parts: string[] = [];
+  let current = "";
+  let currentOctets = 0;
+  // First physical line gets 75 octets; continuations get 74 + the space.
+  let budget = 75;
+
+  for (const ch of line) {
+    // for..of iterates by code point, so surrogate pairs stay intact.
+    const chOctets = OCTETS.encode(ch).length;
+    if (currentOctets + chOctets > budget) {
+      parts.push(current);
+      current = " " + ch;
+      currentOctets = 1 + chOctets;
+      budget = 75;
+    } else {
+      current += ch;
+      currentOctets += chOctets;
+    }
   }
-  if (rest.length > 0) parts.push(" " + rest);
+  parts.push(current);
   return parts;
 }
 

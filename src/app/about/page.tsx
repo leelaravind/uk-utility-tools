@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo";
 
 import { SITE_NAME } from "@/lib/registry";
 
-export const metadata: Metadata = {
-  title: "About",
+export const metadata = pageMetadata({
+  title:
+    "About",
   description:
     "What UK Utility Tools is: free, privacy-first calculators and browser utilities for work, money, documents and everyday tasks. No accounts, no uploads.",
-  alternates: { canonical: "/about" },
-};
+  path: "/about",
+});
 
 const sectionHeading =
   "mt-10 text-xl font-semibold tracking-tight text-foreground sm:text-2xl";

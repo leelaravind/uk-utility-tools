@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 
 import { getTool } from "@/lib/registry";
+import { pageMetadata } from "@/lib/seo";
 import { ToolLayout } from "@/components/ui";
 import { ShiftPayCalculator } from "@/components/tools/shift-pay/ShiftPayCalculator";
 
-export const metadata: Metadata = {
-  title: "Shift Pay Calculator — Night Shifts, Breaks & Overtime",
+export const metadata = pageMetadata({
+  title:
+    "Shift Pay Calculator — Night Shifts, Breaks & Overtime",
   description:
     "Work out estimated pay for any shift: overnight hours, unpaid breaks, night and weekend premiums, and overtime uplift. Free, private, no sign-up.",
-  alternates: { canonical: "/shift-pay" },
-};
+  path: "/shift-pay",
+});
 
 const FAQS = [
   {

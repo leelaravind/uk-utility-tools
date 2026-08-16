@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo";
 
 import { SITE_NAME } from "@/lib/registry";
 
-export const metadata: Metadata = {
-  title: "Terms of Use",
+export const metadata = pageMetadata({
+  title:
+    "Terms of Use",
   description:
     "Terms of use for UK Utility Tools: all results are estimates for guidance only, not financial, tax, legal or immigration advice. Free service provided as-is.",
-  alternates: { canonical: "/terms" },
-};
+  path: "/terms",
+});
 
 const sectionHeading =
   "mt-10 text-xl font-semibold tracking-tight text-foreground sm:text-2xl";

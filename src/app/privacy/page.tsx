@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo";
 
 import { SITE_NAME } from "@/lib/registry";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy",
+export const metadata = pageMetadata({
+  title:
+    "Privacy Policy",
   description:
     "How UK Utility Tools handles your data: everything runs in your browser, nothing is uploaded, no accounts, no analytics, no advertising cookies.",
-  alternates: { canonical: "/privacy" },
-};
+  path: "/privacy",
+});
 
 const sectionHeading =
   "mt-10 text-xl font-semibold tracking-tight text-foreground sm:text-2xl";

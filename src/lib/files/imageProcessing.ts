@@ -161,6 +161,14 @@ export function percentSaved(originalBytes: number, newBytes: number): number {
 export const UNSUPPORTED_TYPE_MESSAGE =
   "This file type isn't supported by your browser — try JPG, PNG or WebP.";
 
+/**
+ * Error carrying a friendly, user-facing message. The UI shows the message
+ * of an ImageToolError verbatim; any other exception (e.g. a DOMException
+ * from a low-memory canvas failure) gets a generic fallback instead so raw
+ * browser internals never reach the page.
+ */
+export class ImageToolError extends Error {}
+
 export interface LoadedImage {
   source: ImageBitmap | HTMLImageElement;
   width: number;
@@ -188,7 +196,7 @@ async function decodeViaImageElement(file: File): Promise<HTMLImageElement> {
     await img.decode();
     return img;
   } catch {
-    throw new Error(UNSUPPORTED_TYPE_MESSAGE);
+    throw new ImageToolError(UNSUPPORTED_TYPE_MESSAGE);
   } finally {
     // Safe once decode() has resolved — the pixels are already in memory.
     URL.revokeObjectURL(url);
@@ -209,7 +217,7 @@ export function releaseImage(loaded: LoadedImage): void {
  */
 export async function loadImage(file: File): Promise<LoadedImage> {
   if (file.size > MAX_FILE_BYTES) {
-    throw new Error(
+    throw new ImageToolError(
       `That file is ${formatBytes(file.size)} — the maximum supported size is ${formatBytes(MAX_FILE_BYTES)}.`,
     );
   }
@@ -228,11 +236,11 @@ export async function loadImage(file: File): Promise<LoadedImage> {
   const { width, height } = dimensionsOf(source);
   if (!width || !height) {
     releaseImage({ source, width, height });
-    throw new Error(UNSUPPORTED_TYPE_MESSAGE);
+    throw new ImageToolError(UNSUPPORTED_TYPE_MESSAGE);
   }
   if (width > MAX_DIMENSION_PX || height > MAX_DIMENSION_PX) {
     releaseImage({ source, width, height });
-    throw new Error(
+    throw new ImageToolError(
       `That image is ${width}×${height}px — the largest supported side is ${MAX_DIMENSION_PX.toLocaleString("en-GB")}px.`,
     );
   }
@@ -267,7 +275,7 @@ function drawTo(
 function ensureFormat(blob: Blob, format: OutputFormat): Blob {
   // Some browsers silently fall back to PNG for formats they can't encode.
   if (blob.type && blob.type !== format) {
-    throw new Error(
+    throw new ImageToolError(
       "Your browser can't save that format — try JPG or PNG instead.",
     );
   }
@@ -301,7 +309,7 @@ export async function processImage(
   canvas.height = height;
   const ctx = canvas.getContext("2d");
   if (!ctx) {
-    throw new Error(
+    throw new ImageToolError(
       "Your browser couldn't create an image canvas — try a different browser.",
     );
   }
@@ -310,7 +318,7 @@ export async function processImage(
     canvas.toBlob(resolve, opts.format, useQuality ? quality : undefined),
   );
   if (!blob) {
-    throw new Error(
+    throw new ImageToolError(
       "Your browser can't save that format — try JPG or PNG instead.",
     );
   }

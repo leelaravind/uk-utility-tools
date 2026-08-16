@@ -223,8 +223,12 @@ export function HolidayPayCalculator() {
                   </span>{" "}
                   gross
                 </>
+              ) : !quickValue.ok &&
+                valueAmount.trim() !== "" &&
+                quickValue.message ? (
+                quickValue.message
               ) : (
-                "Enter an amount to see its estimated value."
+                "Enter an amount and your hourly rate to see its estimated value."
               )}
             </p>
           </div>

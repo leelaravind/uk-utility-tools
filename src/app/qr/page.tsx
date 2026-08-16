@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 
 import { ToolLayout } from "@/components/ui";
+import { pageMetadata } from "@/lib/seo";
 import { getTool } from "@/lib/registry";
 import { QrIsland } from "@/components/tools/qr/QrIsland";
 
-export const metadata: Metadata = {
-  title: "Free QR Code Generator — URL, Wi-Fi, Email & Phone (PNG / SVG)",
+export const metadata = pageMetadata({
+  title:
+    "Free QR Code Generator — URL, Wi-Fi, Email & Phone (PNG / SVG)",
   description:
     "Create QR codes for links, text, Wi-Fi, email and phone numbers in your browser. Download PNG or SVG — free, no watermark, no account, codes never expire.",
-  alternates: { canonical: "/qr" },
-};
+  path: "/qr",
+});
 
 const FAQS = [
   {

@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 
 import { ToolLayout } from "@/components/ui";
+import { pageMetadata } from "@/lib/seo";
 import { getTool } from "@/lib/registry";
 import { ImageToolsIsland } from "@/components/tools/image-tools/ImageToolsIsland";
 
-export const metadata: Metadata = {
-  title: "Image Compressor & Resizer — Free, Private, In Your Browser",
+export const metadata = pageMetadata({
+  title:
+    "Image Compressor & Resizer — Free, Private, In Your Browser",
   description:
     "Compress, resize and convert JPG, PNG and WebP images entirely on your device. Hit a target file size in KB — no uploads, no watermark, no account.",
-  alternates: { canonical: "/image-tools" },
-};
+  path: "/image-tools",
+});
 
 const FAQS = [
   {

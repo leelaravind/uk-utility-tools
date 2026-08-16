@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 
 import { ToolLayout } from "@/components/ui";
+import { pageMetadata } from "@/lib/seo";
 import { getTool } from "@/lib/registry";
 import { CvMatchTool } from "@/components/tools/cv-match/CvMatchTool";
 
-export const metadata: Metadata = {
-  title: "CV Keyword Match Checker — Compare Your CV to a Job Description",
+export const metadata = pageMetadata({
+  title:
+    "CV Keyword Match Checker — Compare Your CV to a Job Description",
   description:
     "Paste your CV and a job description to see a keyword match score, missing skills and hard requirements — analysed privately in your browser, never uploaded.",
-  alternates: { canonical: "/cv-match" },
-};
+  path: "/cv-match",
+});
 
 const FAQS = [
   {

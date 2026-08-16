@@ -1,19 +1,19 @@
-import type { Metadata } from "next";
 
 import { SalaryCalculator } from "@/components/tools/salary/SalaryCalculator";
+import { pageMetadata } from "@/lib/seo";
 import { ToolLayout } from "@/components/ui";
 import { getTaxYear, TAX_YEARS, type TaxBand } from "@/config/ukTax";
 import { getTool } from "@/lib/registry";
 
 const defaultYear = TAX_YEARS[0];
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title:
     "UK Salary Calculator 2026/27 — Take-Home Pay After Tax, NI & Student Loan",
   description:
     "Estimate UK take-home pay for 2026/27 or 2025/26 after income tax, National Insurance, pension and student loans — with Scottish tax bands included.",
-  alternates: { canonical: "/salary" },
-};
+  path: "/salary",
+});
 
 const gbp0 = new Intl.NumberFormat("en-GB", {
   style: "currency",
@@ -28,12 +28,14 @@ function bandRows(bands: TaxBand[]) {
     const from = previous;
     const to = band.upTo;
     previous = band.upTo ?? previous;
+    // Non-overlapping ranges, GOV.UK style: the next band starts £1 above
+    // the previous band's upper limit.
     const range =
       to === null
         ? `Over ${gbp0.format(from)}`
         : from === 0
           ? `Up to ${gbp0.format(to)}`
-          : `${gbp0.format(from)} – ${gbp0.format(to)}`;
+          : `${gbp0.format(from + 1)} – ${gbp0.format(to)}`;
     return { name: band.name, range, rate: `${Math.round(band.rate * 1000) / 10}%` };
   });
 }

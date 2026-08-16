@@ -120,14 +120,46 @@ export function simulatePayoff(
       message:
         "This payment never clears the balance — it does not even cover the first month's interest, so the balance would grow instead of shrinking.",
       firstMonthInterestPence,
-      suggestedMonthlyPence: requiredPaymentPence(
-        balancePence,
-        rate,
-        MAX_MONTHS,
-      ),
+      suggestedMonthlyPence: verifiedMinimumPaymentPence(balancePence, rate),
     };
   }
 
+  const core = simulateCore(balancePence, paymentPence, rate);
+  if (core.cleared) {
+    return {
+      ok: true,
+      months: core.months,
+      totalPaidPence: core.totalPaidPence,
+      totalInterestPence: core.totalInterestPence,
+      finalPaymentPence: core.finalPaymentPence,
+      schedule: core.schedule,
+      payoffMonth: addMonthsIsoMonth(today, core.months),
+    };
+  }
+
+  return {
+    ok: false,
+    message: `This payment would not clear the balance within ${MAX_MONTHS / 12} years.`,
+    firstMonthInterestPence,
+    suggestedMonthlyPence: verifiedMinimumPaymentPence(balancePence, rate),
+  };
+}
+
+interface CoreResult {
+  cleared: boolean;
+  months: number;
+  totalPaidPence: number;
+  totalInterestPence: number;
+  finalPaymentPence: number;
+  schedule: AmortisationRow[];
+}
+
+/** The raw pence-rounded month-by-month simulation, no validation. */
+function simulateCore(
+  balancePence: number,
+  paymentPence: number,
+  rate: number,
+): CoreResult {
   const schedule: AmortisationRow[] = [];
   let balance = balancePence;
   let totalPaid = 0;
@@ -138,7 +170,7 @@ export function simulatePayoff(
     const owed = balance + interest;
 
     if (paymentPence >= owed) {
-      // Final, smaller payment clears everything.
+      // Final, possibly smaller payment clears everything.
       totalPaid += owed;
       totalInterest += interest;
       schedule.push({
@@ -149,13 +181,12 @@ export function simulatePayoff(
         balancePence: 0,
       });
       return {
-        ok: true,
+        cleared: true,
         months: month,
         totalPaidPence: totalPaid,
         totalInterestPence: totalInterest,
         finalPaymentPence: owed,
         schedule,
-        payoffMonth: addMonthsIsoMonth(today, month),
       };
     }
 
@@ -172,11 +203,38 @@ export function simulatePayoff(
   }
 
   return {
-    ok: false,
-    message: `This payment would not clear the balance within ${MAX_MONTHS / 12} years.`,
-    firstMonthInterestPence,
-    suggestedMonthlyPence: requiredPaymentPence(balancePence, rate, MAX_MONTHS),
+    cleared: false,
+    months: MAX_MONTHS,
+    totalPaidPence: totalPaid,
+    totalInterestPence: totalInterest,
+    finalPaymentPence: paymentPence,
+    schedule,
   };
+}
+
+/**
+ * Minimum monthly payment (pence) that actually clears the balance within
+ * MAX_MONTHS under the pence-rounded simulation. The annuity formula alone
+ * can be a penny short (or equal to the first month's interest) at high
+ * APRs, so the candidate is verified against the real simulation and bumped
+ * a penny at a time until it clears.
+ */
+function verifiedMinimumPaymentPence(
+  balancePence: number,
+  rate: number,
+): number {
+  let payment = Math.max(
+    requiredPaymentPence(balancePence, rate, MAX_MONTHS),
+    Math.round(balancePence * rate) + 1,
+    1,
+  );
+  for (let attempt = 0; attempt < 1000; attempt++) {
+    if (simulateCore(balancePence, payment, rate).cleared) {
+      return payment;
+    }
+    payment += 1;
+  }
+  return payment;
 }
 
 /**
@@ -223,16 +281,18 @@ export function requiredMonthlyPayment(
   // Verify against the actual pence-rounded simulation; a couple of penny
   // bumps is always enough because the formula is exact to < 1p.
   for (let attempt = 0; attempt < 4; attempt++) {
-    const sim = simulatePayoff(
-      {
-        balance: balancePence / 100,
-        aprPercent: input.aprPercent,
-        monthlyPayment: paymentPence / 100,
-      },
-      today,
-    );
-    if (sim.ok && sim.months <= months) {
-      return { ...sim, monthlyPaymentPence: paymentPence };
+    const core = simulateCore(balancePence, paymentPence, rate);
+    if (core.cleared && core.months <= months) {
+      return {
+        ok: true,
+        months: core.months,
+        totalPaidPence: core.totalPaidPence,
+        totalInterestPence: core.totalInterestPence,
+        finalPaymentPence: core.finalPaymentPence,
+        schedule: core.schedule,
+        payoffMonth: addMonthsIsoMonth(today, core.months),
+        monthlyPaymentPence: paymentPence,
+      };
     }
     paymentPence += 1;
   }

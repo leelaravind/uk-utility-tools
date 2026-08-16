@@ -365,7 +365,7 @@ export function CreditCardCalculator() {
                 strong: true,
               },
               {
-                label: "Final (smaller) payment",
+                label: "Final payment",
                 value: pence(result.finalPaymentPence),
               },
             ]}
