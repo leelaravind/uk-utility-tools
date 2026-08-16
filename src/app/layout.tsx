@@ -7,6 +7,7 @@ import {
   SITE_TAGLINE,
   SITE_URL,
 } from "@/lib/registry";
+import { ADSENSE_CLIENT_ID, ADSENSE_ENABLED } from "@/config/ads";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import "./globals.css";
@@ -60,6 +61,15 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
+        {ADSENSE_ENABLED ? (
+          // React 19 hoists async scripts into <head> during prerender —
+          // required for AdSense site verification (and powers Auto ads).
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+            crossOrigin="anonymous"
+          />
+        ) : null}
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-field focus:bg-accent-solid focus:px-4 focus:py-2.5 focus:text-sm focus:font-medium focus:text-accent-fg"

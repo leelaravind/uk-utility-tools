@@ -95,10 +95,31 @@ npx wrangler deploy  # uploads ./out as static assets
 ```
 
 `wrangler.jsonc` serves `./out` with auto trailing-slash handling and the
-exported 404 page. The custom domain `tools.itisyou.app` is attached to the
-Worker via the Cloudflare dashboard (Workers → Custom Domains).
+exported 404 page, fronted by a thin `worker.js` that adds
+`charset=utf-8` to HTML responses. The custom domain `tools.itisyou.app`
+is attached to the Worker as a Cloudflare custom domain.
 `public/_headers` adds security headers (nosniff, referrer policy,
 permissions policy, frame denial) to every response.
+
+### Repository and CI
+
+- Source of truth: **https://github.com/leelaravind/uk-utility-tools**
+  (private), branch `main`.
+- `.github/workflows/deploy.yml` runs lint → typecheck → tests → build →
+  `wrangler deploy` on every push to `main` (and manually via
+  *Run workflow*). One-time setup: add a repository secret named
+  `CLOUDFLARE_API_TOKEN` (GitHub → Settings → Secrets and variables →
+  Actions) containing a Cloudflare API token created from the
+  **Edit Cloudflare Workers** template at
+  https://dash.cloudflare.com/profile/api-tokens. Until that secret exists,
+  the deploy step fails and deploys remain manual (`npx wrangler deploy`).
+
+### Monetisation
+
+Ad architecture is config-driven from `src/config/ads.ts` (AdSense script
+in `<head>`, three dormant `AdSlot` placeholders per tool page,
+`public/ads.txt`). See `MONETISATION.md` for the enable checklist,
+including the UK/EEA consent requirement.
 
 ## Privacy architecture
 
@@ -107,8 +128,10 @@ Privacy is structural, not a policy promise:
 - Static hosting only — there is no application server to receive data.
 - All calculators run in the browser; CV/job text, images, PDFs and invoice
   data are processed on-device and never uploaded.
-- No accounts, no analytics scripts, no advertising cookies, no
-  fingerprinting in v1; the application sets no cookies.
+- No accounts, no analytics scripts, no fingerprinting in v1; the
+  application itself sets no cookies. The only third-party script is the
+  Google AdSense loader (see `MONETISATION.md`); ad units are off by
+  default and the privacy page discloses the script.
 - Cloudflare receives standard web requests (IP, user agent) as any host
   does — server logs only, nothing added by us.
 

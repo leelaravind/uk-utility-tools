@@ -7,7 +7,7 @@ export const metadata = pageMetadata({
   title:
     "Privacy Policy",
   description:
-    "How UK Utility Tools handles your data: everything runs in your browser, nothing is uploaded, no accounts, no analytics, no advertising cookies.",
+    "How UK Utility Tools handles your data: everything runs in your browser, nothing is uploaded, no accounts and no analytics. Plain-English privacy policy.",
   path: "/privacy",
 });
 
@@ -24,8 +24,8 @@ export default function PrivacyPage() {
       </h1>
       <p className="mt-4 text-lg leading-relaxed text-muted">
         The short version: your data stays on your device. {SITE_NAME} has no
-        accounts, no analytics scripts, no advertising cookies and no
-        uploads.
+        accounts, no analytics scripts and no uploads. What you type into the
+        tools never leaves your browser.
       </p>
 
       <h2 className={sectionHeading}>Everything runs in your browser</h2>
@@ -56,14 +56,30 @@ export default function PrivacyPage() {
         </li>
       </ul>
 
-      <h2 className={sectionHeading}>No accounts, no tracking</h2>
+      <h2 className={sectionHeading}>No accounts, no tracking by us</h2>
       <ul className={list}>
         <li>No accounts and no sign-up — we never ask who you are.</li>
         <li>No analytics scripts in this version of the site.</li>
-        <li>No advertising cookies.</li>
         <li>No fingerprinting.</li>
         <li>The application itself sets no cookies.</li>
+        <li>
+          The numbers, text and files you put into the tools are processed
+          on your device and never sent to us or to advertisers.
+        </li>
       </ul>
+
+      <h2 className={sectionHeading}>Advertising</h2>
+      <p className={paragraph}>
+        To keep the tools free, the site loads the Google AdSense script
+        (pagead2.googlesyndication.com). Loading that script means your
+        browser makes a request to Google, which — like any web request —
+        includes your IP address and user agent. If and when adverts are
+        shown, Google may set cookies or use similar technologies to serve
+        and measure ads; where consent is required (for example in the UK
+        and EEA), a consent prompt will be shown before any personalised
+        advertising cookies are used. Advertising never sees what you type
+        into the tools — that stays on your device.
+      </p>
 
       <h2 className={sectionHeading}>Hosting and server logs</h2>
       <p className={paragraph}>
