@@ -18,11 +18,13 @@ because their bands and thresholds are defined in pounds.
 
 - **Google Search Console**: verified — the property is collecting clicks.
 - **Google AdSense**: under review; no decision either way. The verification
-  setup is preserved (publisher client ID, `public/ads.txt`, the `<head>`
-  script wiring in `src/app/layout.tsx`). `ADSENSE_ENABLED` is currently
-  `false` — a deliberate pause during a Google Safe Browsing review of the
-  wider itisyou.app domain network, documented in the comment above the
-  constant in `src/config/ads.ts`.
+  setup is live and preserved — publisher client ID, `public/ads.txt` and the
+  `<head>` script wiring in `src/app/layout.tsx`, with `ADSENSE_ENABLED = true`
+  in the deployed configuration. A local uncommitted pause
+  (`ADSENSE_ENABLED = false`, written 2026-08-17 during a Google Safe Browsing
+  review of the wider itisyou.app network) is deliberately not deployed:
+  removing the loader mid-review risks AdSense reporting its verification code
+  as missing.
 
 ## Image Tools for AI
 
@@ -31,8 +33,40 @@ Two modes of one experience, shipped on two routes that share
 
 | Route | Mode | Status |
 |---|---|---|
-| `/image-ai-optimizer` | Optimize Image | Complete. Featured in the hero slot on the landing page. |
-| `/image-context` | Image to AI Context | Complete, with semantic vision deliberately at Tier C (see below). |
+| `/image-ai-optimizer` | Optimize Image | **PRODUCTION.** Featured in the hero slot on the landing page. |
+| `/image-context` | Image to AI Context | **DEVELOPMENT / DISABLED IN PRODUCTION.** |
+
+### AI Context — DEVELOPMENT / DISABLED IN PRODUCTION
+
+**Reason:** the implementation has working local OCR and layout processing, but
+local semantic scene captioning and object detection are not yet operational at
+the required quality. Without them the tool cannot reliably answer "what is
+this image?", and shipping it as a finished feature would misrepresent it.
+
+This is unfinished **semantic vision work**, not a failure of the architecture.
+The pipeline, versioned `AnalysisDocument`, public schema, serialisers,
+compact/balanced/detailed modes, all five provider wrappers, the
+prompt-injection protections, the capability/WebGPU/WASM tier detection, the
+OCR module and worker, the fixtures, the privacy tests and the model manifest
+abstraction are all complete, tested and retained.
+
+**How it is disabled:** `AI_CONTEXT_ENABLED` in `src/config/features.ts`. While
+false, the tool is filtered out of `TOOLS`, which is the single array every
+public discovery path derives from — homepage catalogue, instant search,
+category listings, related-tool links and the generated sitemap. The
+`/image-context` route renders a short "in development" notice marked
+`noindex, nofollow`, and the Optimize / AI Context mode selector is not
+rendered at all. `src/config/features.test.ts` pins all of this.
+
+**Nothing was deleted.** Source: `src/lib/imageAi/context/` (34 modules, 17
+test files), UI in `src/components/tools/image-ai/context/` and
+`AiContextPanel.tsx`, specification in `docs/`.
+
+**Future AI Context development must address:** a practical browser semantic
+vision model; WebGPU execution; WASM/local CPU fallback; a model download
+budget; model caching; semantic scene captioning; object/entity understanding;
+screenshot understanding; OCR improvements; semantic/OCR/layout fusion; mobile
+feasibility; and privacy network verification.
 
 **Image token estimation** lives only in `src/config/imageProviders/`, a
 versioned provider configuration carrying a `source` URL and a `lastVerified`

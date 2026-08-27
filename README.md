@@ -145,11 +145,16 @@ in `<head>`, three dormant `AdSlot` placeholders per tool page,
 including the UK/EEA consent requirement.
 
 Google AdSense status: **under review** — no decision either way. The
-verification setup is preserved (publisher client ID, `public/ads.txt`, the
-`<head>` script wiring), but `ADSENSE_ENABLED` is currently `false`: a
-deliberate pause during a Google Safe Browsing review of the wider
-itisyou.app domain network. The reasoning is documented in the comment above
-the constant in `src/config/ads.ts`.
+verification setup is live and preserved: publisher client ID, `public/ads.txt`
+and the `<head>` script wiring in `src/app/layout.tsx`, with
+`ADSENSE_ENABLED = true` in the deployed configuration so the loader keeps
+serving and AdSense can find its verification code.
+
+A local, uncommitted pause (`ADSENSE_ENABLED = false`) exists in the working
+tree from 2026-08-17, written during a Google Safe Browsing review of the wider
+itisyou.app domain network. It is deliberately **not** deployed: removing the
+loader mid-review would risk AdSense reporting the verification code as
+missing. Deploy it only as a considered decision.
 
 ## Privacy architecture
 
@@ -191,8 +196,12 @@ sharing `src/components/tools/image-ai/ImageAiIsland.tsx`:
 - **Optimize Image** — resize, crop and re-encode an image before sending it to
   a multimodal AI, with a before/after visual-token estimate. Canvas only; no
   model download.
-- **AI Context** — extract meaning locally (OCR plus layout heuristics) and copy
-  compact structured context instead of the image.
+- **AI Context** — **development / disabled in production.** Extracts meaning
+  locally (OCR plus layout heuristics) and copies compact structured context
+  instead of the image. Local semantic scene captioning and object detection
+  are not yet operational, so the feature is hidden behind
+  `AI_CONTEXT_ENABLED` in `src/config/features.ts` rather than shipped
+  half-finished. The implementation, tests and specification are all retained.
 
 Image-token maths lives **only** in `src/config/imageProviders/`, a versioned
 provider configuration with a `source` URL and a `lastVerified` date per

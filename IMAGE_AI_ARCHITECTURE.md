@@ -1,5 +1,14 @@
 # Image Tools for AI — architecture
 
+> **Current status**
+> - **Optimize Image (`/image-ai-optimizer`) — PRODUCTION.** Publicly enabled.
+> - **AI Context (`/image-context`) — DEVELOPMENT / DISABLED IN PRODUCTION.**
+>   Hidden behind `AI_CONTEXT_ENABLED` in `src/config/features.ts` because
+>   local semantic scene captioning and object detection are not yet
+>   operational. Everything else in the pipeline works and is retained; see
+>   "Semantic vision ships as Tier C" and "Remaining work" below. Nothing has
+>   been deleted.
+
 Covers the two modes served by `/image-ai-optimizer` and `/image-context`.
 This document is for contributors changing the token maths, the provider
 configuration, or the local analysis pipeline.
@@ -234,3 +243,30 @@ Both modes build on the existing Image Compressor engine in
 `compressToTarget`, `computeTargetDimensions`, `buildOutputFilename`,
 `formatBytes`, `percentSaved`, `ImageToolError`). There is deliberately **one**
 resize/encode engine on the site; `/image-tools` continues to use it unchanged.
+
+## Remaining work before AI Context can ship
+
+The blocker is semantic vision. Everything below must be resolved, in roughly
+this order:
+
+1. **A practical browser semantic vision model** — chosen by measurement, not
+   by reputation. Record exact transferred bytes, revision pin, licence and
+   redistribution rights.
+2. **WebGPU execution** for Tier A devices.
+3. **WASM / local CPU fallback** for Tier B, with a quantised model.
+4. **A model download budget** that is honest on mobile data, and a decision
+   about what Tier C devices are told.
+5. **Model caching** and a working "clear local models" path.
+6. **Semantic scene captioning** — the thing that answers "what is this?".
+7. **Object / entity understanding** with normalised boxes and real confidence.
+8. **Screenshot understanding** improved by fusing detections with OCR.
+9. **OCR improvements** — preprocessing passes, rotation, low contrast.
+10. **Semantic / OCR / layout fusion** in `merge.ts`, replacing today's
+    OCR-only evidence.
+11. **Mobile feasibility** — memory ceilings and thermal behaviour on a mid
+    range phone, not just a desktop.
+12. **Privacy network verification** — a browser-level capture proving no image
+    bytes or derived content leave, plus self-hosting the OCR assets.
+
+Re-enabling is a one-line change (`AI_CONTEXT_ENABLED = true`), but should only
+happen once 1–11 are genuinely done and 12 has been re-verified.

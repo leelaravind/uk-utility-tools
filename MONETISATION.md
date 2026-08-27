@@ -12,7 +12,8 @@ The verification setup is preserved and unchanged: the publisher client ID in
 `src/config/ads.ts`, `public/ads.txt` (served at `/ads.txt`) and the `<head>`
 script wiring in `src/app/layout.tsx`.
 
-`ADSENSE_ENABLED` was set to `false` on 2026-08-17 as a deliberate pause during
+A local, uncommitted change setting `ADSENSE_ENABLED` to `false` was written on
+2026-08-17 as a proposed pause during
 a Google Safe Browsing review of the wider itisyou.app domain network: a
 forensic audit ranked "new domain + login flow + freshly-added AdSense" as the
 strongest combined trigger for the possible-phishing flag raised on
@@ -26,7 +27,7 @@ comment above it.
 | Setting | Value | Effect |
 |---|---|---|
 | `ADSENSE_CLIENT_ID` | `ca-pub-4472252904102516` | Your publisher ID |
-| `ADSENSE_ENABLED` | `false` (paused) | When `true`, the AdSense bootstrap script loads in `<head>` on every page — this is what AdSense **site verification** checks, and it is all Auto ads needs. Paused for the Safe Browsing review; see *Account status* above |
+| `ADSENSE_ENABLED` | `true` (deployed) | When `true`, the AdSense bootstrap script loads in `<head>` on every page — this is what AdSense **site verification** checks, and it is all Auto ads needs. Deployed as `true` so the review can find the code; see *Account status* above |
 | `AD_UNITS_ENABLED` | `false` | Manual ad placeholders render nothing |
 | `public/ads.txt` | `google.com, pub-4472252904102516, DIRECT, f08c47fec0942fa0` | Served at `/ads.txt`; AdSense's alternative verification method and required for full revenue eligibility |
 

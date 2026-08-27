@@ -5,6 +5,8 @@
  * names or slugs. New tools are added by appending to the TOOLS array.
  */
 
+import { AI_CONTEXT_ENABLED } from "@/config/features";
+
 export type CategoryId =
   | "work-pay"
   | "money"
@@ -55,7 +57,7 @@ export interface Tool {
   icon: string;
 }
 
-export const TOOLS: Tool[] = [
+const ALL_TOOLS: Tool[] = [
   {
     slug: "image-ai-optimizer",
     title: "Image Optimizer for AI",
@@ -414,6 +416,24 @@ export const TOOLS: Tool[] = [
     icon: "image",
   },
 ];
+
+/**
+ * Every tool in the codebase, including any hidden behind a development flag.
+ * Use this only for tooling that must see unreleased work.
+ */
+export const ALL_TOOLS_INCLUDING_DEVELOPMENT: Tool[] = ALL_TOOLS;
+
+/**
+ * The public catalogue.
+ *
+ * The homepage, instant search, category listings, related-tool links and the
+ * generated sitemap ALL derive from this array, so a tool omitted here
+ * disappears from public discovery everywhere at once. That is deliberate:
+ * one flag, one filter, no scattered checks.
+ */
+export const TOOLS: Tool[] = ALL_TOOLS.filter(
+  (tool) => AI_CONTEXT_ENABLED || tool.slug !== "image-context",
+);
 
 export const SITE_NAME = "ITISYOU Tools";
 export const SITE_URL = "https://tools.itisyou.app";

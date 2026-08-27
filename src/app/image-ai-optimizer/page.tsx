@@ -1,6 +1,7 @@
 import { ToolLayout } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
 import { getTool } from "@/lib/registry";
+import { AI_CONTEXT_ENABLED } from "@/config/features";
 import { ImageAiIsland } from "@/components/tools/image-ai/ImageAiIsland";
 
 export const metadata = pageMetadata({
@@ -41,12 +42,19 @@ const FAQS = [
     answer:
       "No. Decoding, cropping, resizing and re-encoding all happen in your browser using standard canvas APIs. The image is never sent to our servers, to an AI provider, or to any analytics service, and no API key is needed. The optimised copy is created locally and saved straight from your browser.",
   },
-  {
-    question: "Which should I use — the optimizer or Image → AI Context?",
-    answer:
-      "Use the optimizer when you still want the AI to look at the picture itself and you just want a sensibly sized copy. Use Image → AI Context when you would rather extract the meaning locally and paste compact text instead of the image. They solve different problems, and you can switch between them at the top of this page.",
-  },
 ];
+
+/**
+ * Only meaningful while the companion mode is public. Kept beside the flag so
+ * re-enabling AI Context restores the cross-reference automatically.
+ */
+const AI_CONTEXT_FAQ = {
+  question: "Which should I use — the optimizer or Image → AI Context?",
+  answer:
+    "Use the optimizer when you still want the AI to look at the picture itself and you just want a sensibly sized copy. Use Image → AI Context when you would rather extract the meaning locally and paste compact text instead of the image. They solve different problems, and you can switch between them at the top of this page.",
+};
+
+const VISIBLE_FAQS = AI_CONTEXT_ENABLED ? [...FAQS, AI_CONTEXT_FAQ] : FAQS;
 
 export default function ImageAiOptimizerPage() {
   return (
@@ -127,7 +135,7 @@ export default function ImageAiOptimizerPage() {
           </p>
         </>
       }
-      faqs={FAQS}
+      faqs={VISIBLE_FAQS}
       disclaimer={
         <>
           Token figures are estimates produced from each provider&rsquo;s

@@ -1,14 +1,39 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+
 import { ToolLayout } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
 import { getTool } from "@/lib/registry";
+import { AI_CONTEXT_ENABLED } from "@/config/features";
 import { ImageAiIsland } from "@/components/tools/image-ai/ImageAiIsland";
 
-export const metadata = pageMetadata({
-  title: "Image → AI Context — Convert a Screenshot to AI-Readable Text",
-  description:
-    "Turn an image into compact, AI-readable context in your browser: local OCR plus layout analysis, exported as structured JSON or tagged text you can paste into any AI. Your image is processed locally and is not uploaded.",
-  path: "/image-context",
-});
+/**
+ * Image → AI Context.
+ *
+ * DEVELOPMENT / DISABLED IN PRODUCTION — see `AI_CONTEXT_ENABLED` in
+ * `src/config/features.ts` for why.
+ *
+ * While the flag is off this route renders a short notice and is marked
+ * `noindex, nofollow`: the tool is absent from the catalogue, so nothing links
+ * here, but a route that once existed in a build should not 404 confusingly or
+ * expose an unfinished feature to anyone who guesses the URL. The complete
+ * page below is preserved verbatim and comes back when the flag flips.
+ */
+
+export const metadata: Metadata = AI_CONTEXT_ENABLED
+  ? pageMetadata({
+      title: "Image → AI Context — Convert a Screenshot to AI-Readable Text",
+      description:
+        "Turn an image into compact, AI-readable context in your browser: local OCR and layout analysis, exported as structured JSON or tagged text you can paste into any AI. Your image is processed locally and is not uploaded.",
+      path: "/image-context",
+    })
+  : {
+      title: "Image → AI Context",
+      description:
+        "This tool is still in development and is not currently available.",
+      // No canonical: an unreleased page should not compete for indexing.
+      robots: { index: false, follow: false },
+    };
 
 const FAQS = [
   {
@@ -48,7 +73,44 @@ const FAQS = [
   },
 ];
 
+/** Shown while `AI_CONTEXT_ENABLED` is false. */
+function InDevelopment() {
+  return (
+    <div className="mx-auto w-full max-w-2xl px-4 py-20 text-center sm:px-6">
+      <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+        Image → AI Context
+      </h1>
+      <p className="mt-4 text-lg leading-relaxed text-muted">
+        This tool is still in development and is not available yet.
+      </p>
+      <p className="mx-auto mt-3 max-w-xl leading-relaxed text-muted">
+        It reads an image locally and turns it into compact, AI-readable
+        context. The text and layout half works; the part that recognises what
+        is actually pictured does not yet, so we would rather not ship it than
+        ship something that quietly answers the wrong question.
+      </p>
+      <div className="mt-8">
+        <Link
+          href="/image-ai-optimizer"
+          className="inline-flex h-11 items-center justify-center rounded-field bg-accent-solid px-5 text-base font-medium text-accent-fg transition-colors hover:bg-accent-solid-hover"
+        >
+          Try the Image Optimizer for AI
+        </Link>
+      </div>
+      <p className="mt-6 text-sm text-muted">
+        Looking for something else?{" "}
+        <Link href="/" className="text-accent underline underline-offset-2">
+          Browse all tools
+        </Link>
+        .
+      </p>
+    </div>
+  );
+}
+
 export default function ImageContextPage() {
+  if (!AI_CONTEXT_ENABLED) return <InDevelopment />;
+
   return (
     <ToolLayout
       tool={getTool("image-context")!}
