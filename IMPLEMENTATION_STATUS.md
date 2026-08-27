@@ -24,6 +24,44 @@ because their bands and thresholds are defined in pounds.
   wider itisyou.app domain network, documented in the comment above the
   constant in `src/config/ads.ts`.
 
+## Image Tools for AI
+
+Two modes of one experience, shipped on two routes that share
+`src/components/tools/image-ai/ImageAiIsland.tsx`:
+
+| Route | Mode | Status |
+|---|---|---|
+| `/image-ai-optimizer` | Optimize Image | Complete. Featured in the hero slot on the landing page. |
+| `/image-context` | Image to AI Context | Complete, with semantic vision deliberately at Tier C (see below). |
+
+**Image token estimation** lives only in `src/config/imageProviders/`, a
+versioned provider configuration carrying a `source` URL and a `lastVerified`
+date per profile, with staleness surfaced in the UI after 180 days. Claude is
+the only provider with a documented, reproducible rule (28x28 visual patches;
+2576px/4784 tokens on the high-resolution tier, 1568px/1568 on standard) and is
+therefore the only provider given a number. OpenAI, Gemini and Grok report
+"varies by model" rather than a fabricated estimate.
+
+Savings are always computed by simulating the provider's own automatic resize
+on both the original and the optimised copy, so the tool never claims a
+reduction the provider's downscaling had already taken. Verified: a 4K to 1080p
+optimisation on the standard tier correctly reports 0%.
+
+**Semantic vision is deliberately not shipped.** The specification requires a
+measured technical spike before bundling a browser vision model; that
+measurement has not been done, so the model registry is empty and output is
+OCR plus layout heuristics. This is stated in the UI and in every result's
+limitations. There is no cloud fallback.
+
+**Known limitation:** `tesseract.js` fetches its WASM core and language data
+from its default CDN on first analysis. Those requests carry no image data and
+nothing derived from an image, so the privacy boundary holds, but self-hosting
+is preferred by the specification. `src/lib/imageAi/context/ocr/assets.ts` is
+the single switch; it is not flipped because vendoring adds roughly 15-35 MB of
+binaries to the repository and every deployment. See `DEPENDENCY_NOTES.md`.
+
+Full contributor guide: `IMAGE_AI_ARCHITECTURE.md`.
+
 ## Deployment
 
 | | |
@@ -33,7 +71,7 @@ because their bands and thresholds are defined in pounds.
 | **Hosting** | Cloudflare Workers static assets (`wrangler deploy`, config in `wrangler.jsonc`) with a thin `worker.js` wrapper that adds `charset=utf-8` to HTML responses |
 | **Repository** | Local git repository at the project root, branch `main` (no remote configured) |
 
-## Tools completed (15/15)
+## Tools completed (17/17)
 
 | Tool | Route | Engine | Tests |
 |---|---|---|---|

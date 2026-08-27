@@ -57,6 +57,9 @@ export type { AdSlotProps } from "./AdSlot";
 export { ToolIcon } from "./ToolIcon";
 export type { ToolIconProps } from "./ToolIcon";
 
+export { FeaturedTool } from "./FeaturedTool";
+export type { FeaturedToolProps } from "./FeaturedTool";
+
 export { ToolCard } from "./ToolCard";
 export type { ToolCardProps } from "./ToolCard";
 

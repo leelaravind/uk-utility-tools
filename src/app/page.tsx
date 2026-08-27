@@ -3,11 +3,13 @@ import type { Metadata } from "next";
 import {
   CATEGORIES,
   SITE_TAGLINE,
+  getFeaturedTool,
   getPopularTools,
   getToolsByCategory,
 } from "@/lib/registry";
 import { ToolSearch } from "@/components/search/ToolSearch";
 import { ToolCard } from "@/components/ui/ToolCard";
+import { FeaturedTool } from "@/components/ui/FeaturedTool";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -15,6 +17,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   const popular = getPopularTools();
+  const featured = getFeaturedTool();
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 pb-8 sm:px-6">
@@ -46,6 +49,21 @@ export default function Home() {
           <ToolSearch />
         </div>
       </section>
+
+      {/* Highlighted tool — the hero slot, above everything else */}
+      {featured ? (
+        <section aria-labelledby="featured-heading" className="pb-4">
+          <h2 id="featured-heading" className="sr-only">
+            Highlighted tool
+          </h2>
+          <FeaturedTool
+            tool={featured}
+            badge="Most useful"
+            pitch="Sending screenshots or photos to Claude, ChatGPT, Gemini or Grok? Resize and crop them first, and see the estimated visual-token cost before and after — including the automatic resizing the provider would apply anyway. Everything runs in your browser; nothing is uploaded."
+            cta="Open the optimizer"
+          />
+        </section>
+      ) : null}
 
       {/* Popular tools */}
       <section aria-labelledby="popular-heading" className="py-8">

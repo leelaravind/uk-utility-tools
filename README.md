@@ -183,6 +183,31 @@ figure instead.
 Full contributor guide, including how to add question types, industries,
 roles, skills, tones and frameworks: **`JOB_ANSWER_ARCHITECTURE.md`**.
 
+## Image Tools for AI
+
+`/image-ai-optimizer` and `/image-context` are two modes of one experience,
+sharing `src/components/tools/image-ai/ImageAiIsland.tsx`:
+
+- **Optimize Image** — resize, crop and re-encode an image before sending it to
+  a multimodal AI, with a before/after visual-token estimate. Canvas only; no
+  model download.
+- **AI Context** — extract meaning locally (OCR plus layout heuristics) and copy
+  compact structured context instead of the image.
+
+Image-token maths lives **only** in `src/config/imageProviders/`, a versioned
+provider configuration with a `source` URL and a `lastVerified` date per
+profile. Claude is currently the only provider with a documented, reproducible
+rule (28×28 visual patches, per-tier edge and token caps); the others report
+"varies by model" rather than a fabricated number.
+
+The critical correctness rule: savings are computed by simulating the
+provider's own automatic resize on **both** the original and the optimised copy,
+so the tool never claims a saving the provider's own downscaling already took.
+
+Neither mode uploads anything. Full contributor guide, including how to add a
+provider and how the privacy boundary is enforced:
+**`IMAGE_AI_ARCHITECTURE.md`**.
+
 ## Tax configuration maintenance
 
 UK tax figures live in versioned configuration under `src/config/ukTax…`

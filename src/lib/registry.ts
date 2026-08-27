@@ -46,11 +46,38 @@ export interface Tool {
   related: string[];
   /** Shown in the "Popular tools" section on the landing page */
   popular?: boolean;
+  /**
+   * The single tool given the hero slot at the top of the landing page.
+   * Exactly one tool should carry this.
+   */
+  featured?: boolean;
   /** Icon key — mapped to an inline SVG in the icon component */
   icon: string;
 }
 
 export const TOOLS: Tool[] = [
+  {
+    slug: "image-ai-optimizer",
+    title: "Image Optimizer for AI",
+    shortTitle: "AI Image Optimizer",
+    description:
+      "Resize and compress an image before you send it to Claude, ChatGPT, Gemini or Grok, and see the estimated visual-token cost before and after. Runs entirely in your browser.",
+    category: "images",
+    keywords: [
+      "optimize image for ai",
+      "reduce image tokens for claude",
+      "claude image token calculator",
+      "resize image for claude",
+      "compress image for ai",
+      "image token estimator",
+      "visual tokens",
+      "screenshot size for ai",
+    ],
+    related: ["image-context", "image-tools", "pdf-tools"],
+    popular: true,
+    featured: true,
+    icon: "image",
+  },
   {
     slug: "shift-pay",
     title: "Shift Pay Calculator",
@@ -366,6 +393,26 @@ export const TOOLS: Tool[] = [
     related: ["cv-match", "job-answer", "qr"],
     icon: "sparkles",
   },
+  {
+    slug: "image-context",
+    title: "Image → AI Context",
+    shortTitle: "Image to AI Context",
+    description:
+      "Convert an image into compact, AI-readable context in your browser — local OCR and layout analysis, then copy the structured result into any AI. Your image is not uploaded.",
+    category: "images",
+    keywords: [
+      "image to ai context",
+      "screenshot to ai context",
+      "image to text for ai",
+      "image to json",
+      "local image analysis",
+      "private image reader",
+      "screenshot to ai prompt context",
+      "extract text from screenshot",
+    ],
+    related: ["image-ai-optimizer", "image-tools", "cv-match"],
+    icon: "image",
+  },
 ];
 
 export const SITE_NAME = "ITISYOU Tools";
@@ -390,4 +437,9 @@ export function getRelatedTools(tool: Tool): Tool[] {
 
 export function getPopularTools(): Tool[] {
   return TOOLS.filter((t) => t.popular);
+}
+
+/** The tool given the hero slot at the top of the landing page. */
+export function getFeaturedTool(): Tool | undefined {
+  return TOOLS.find((t) => t.featured);
 }
