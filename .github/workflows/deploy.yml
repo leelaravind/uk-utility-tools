@@ -38,5 +38,11 @@ jobs:
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
+          # Pin an explicit Wrangler. The action's default is 3.90.0, which
+          # predates JSONC config support and therefore cannot read
+          # `wrangler.jsonc` at all — it fails with "Missing entry-point"
+          # because it never sees the `main` field. Every deploy since
+          # 2026-08-16 failed for this reason.
+          wranglerVersion: "4.127.0"
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: a0365f6aaae5fe32b3fdb8fa08fd000c
