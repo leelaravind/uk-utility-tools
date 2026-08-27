@@ -220,7 +220,7 @@ export function buildIcs(events: IcsEvent[], dtStamp: Date): string {
   const lines: string[] = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//UK Utility Tools//Visa Dates//EN",
+    "PRODID:-//ITISYOU Tools//Visa Dates//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
   ];

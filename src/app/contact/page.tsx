@@ -6,15 +6,15 @@ export const metadata = pageMetadata({
   title:
     "Contact",
   description:
-    "Get in touch with UK Utility Tools — report a bug, flag an out-of-date figure or suggest a new tool. No forms, no accounts: just email.",
+    "Get in touch with ITISYOU Tools — report a bug, flag an out-of-date figure or suggest a new tool. No forms, no accounts: just email.",
   path: "/contact",
 });
 
 /**
- * Placeholder contact address for v1 — may change as the project settles
- * on its final domain setup.
+ * Public support address for the site — the single source for every
+ * mailto: link shown to visitors.
  */
-const CONTACT_EMAIL = "hello@itisyou.app";
+const CONTACT_EMAIL = "support@itisyou.app";
 
 const sectionHeading =
   "mt-10 text-xl font-semibold tracking-tight text-foreground sm:text-2xl";

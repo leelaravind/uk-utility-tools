@@ -53,6 +53,18 @@ export default function ShiftPayPage() {
       faqs={FAQS}
       explanation={
         <>
+          <h3>Currencies</h3>
+          <p>
+            The shift maths is currency-neutral — hours multiplied by a rate —
+            so you can switch the calculator between{" "}
+            <strong>GBP (£), USD ($) and EUR (€)</strong> and every figure is
+            identical apart from the symbol. No exchange rates are used and
+            nothing is converted. The worked examples below are written in
+            pounds, but they hold in any of the three currencies. Deductions,
+            minimum-wage floors and premium rules differ by country: the
+            references to UK law on this page describe the position in the
+            United Kingdom only.
+          </p>
           <h3>The basic maths</h3>
           <p>
             The calculator works on a minute-by-minute timeline. It takes the

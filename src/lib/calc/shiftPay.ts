@@ -43,7 +43,7 @@ export interface ShiftPayInput {
 
   /** Night premium on/off. */
   nightPremium: boolean;
-  /** Extra £/hour paid during the night window (raw string). */
+  /** Extra per hour paid during the night window (raw string). */
   nightRate: string;
   /** Night window start "HH:MM" — default 22:00. */
   nightStart: string;
@@ -52,7 +52,7 @@ export interface ShiftPayInput {
 
   /** Whole shift counts as a weekend shift. */
   weekendShift: boolean;
-  /** Extra £/hour for weekend shifts (raw string). */
+  /** Extra per hour for weekend shifts (raw string). */
   weekendRate: string;
 
   /** Overtime on/off. */
@@ -133,7 +133,7 @@ export function calculateShiftPay(
   }
   const rate = parseNumber(input.hourlyRate);
   if (rate === null || rate <= 0) {
-    return calcError("rate", "Hourly rate must be more than £0.");
+    return calcError("rate", "Hourly rate must be more than zero.");
   }
   const ratePence = poundsToPence(rate);
 
@@ -145,13 +145,13 @@ export function calculateShiftPay(
     if (input.nightRate.trim() === "") {
       return calcError(
         "nightRate",
-        "Enter the night premium in £ per hour (0 if none).",
+        "Enter the night premium per hour (0 if none).",
         true,
       );
     }
     const nightRate = parseNumber(input.nightRate);
     if (nightRate === null || nightRate < 0) {
-      return calcError("nightRate", "Night premium must be £0 or more.");
+      return calcError("nightRate", "Night premium must be zero or more.");
     }
     nightRatePence = poundsToPence(nightRate);
 
@@ -194,13 +194,13 @@ export function calculateShiftPay(
     if (input.weekendRate.trim() === "") {
       return calcError(
         "weekendRate",
-        "Enter the weekend premium in £ per hour (0 if none).",
+        "Enter the weekend premium per hour (0 if none).",
         true,
       );
     }
     const weekendRate = parseNumber(input.weekendRate);
     if (weekendRate === null || weekendRate < 0) {
-      return calcError("weekendRate", "Weekend premium must be £0 or more.");
+      return calcError("weekendRate", "Weekend premium must be zero or more.");
     }
     weekendRatePence = poundsToPence(weekendRate);
   }

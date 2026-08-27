@@ -6,6 +6,7 @@ import {
   Button,
   CheckboxInput,
   CurrencyInput,
+  CurrencySelect,
   NumberInput,
   ResultCard,
   SelectInput,
@@ -15,8 +16,9 @@ import { calculateShiftPay } from "@/lib/calc/shiftPay";
 import {
   formatDecimalHours,
   formatHoursMinutes,
-  formatPence,
 } from "@/lib/calc/workingHours";
+import { currencySymbol, formatCurrencyFromMinor } from "@/lib/currency";
+import { useCurrencyPreference } from "@/lib/useCurrencyPreference";
 
 const MULTIPLIER_OPTIONS = [
   { value: "1", label: "1× (no uplift)" },
@@ -27,6 +29,7 @@ const MULTIPLIER_OPTIONS = [
 ];
 
 export function ShiftPayCalculator() {
+  const [currency, setCurrency] = useCurrencyPreference();
   const [start, setStart] = useState("09:00");
   const [end, setEnd] = useState("17:30");
   const [overnight, setOvernight] = useState(false);
@@ -48,6 +51,14 @@ export function ShiftPayCalculator() {
 
   const overtimeMultiplier =
     multiplierChoice === "custom" ? customMultiplier : multiplierChoice;
+
+  /**
+   * Every money string on this page goes through here. The pay maths is
+   * currency-neutral — the selector only changes the symbol in front of the
+   * digits, never a calculated figure, and no conversion is applied.
+   */
+  const money = (pence: number) => formatCurrencyFromMinor(pence, currency);
+  const symbol = currencySymbol(currency);
 
   const result = useMemo(
     () =>
@@ -119,7 +130,7 @@ export function ShiftPayCalculator() {
           onChange={setOvernight}
           hint="The finish time is on the next day — e.g. 22:00 to 06:00."
         />
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-3">
           <NumberInput
             id="shift-break"
             label="Unpaid break"
@@ -133,11 +144,17 @@ export function ShiftPayCalculator() {
           <CurrencyInput
             id="shift-rate"
             label="Hourly rate"
+            currency={currency}
             value={hourlyRate}
             onChange={setHourlyRate}
             suffix="per hour"
             placeholder="12.50"
             error={fieldError("rate")}
+          />
+          <CurrencySelect
+            id="shift-currency"
+            value={currency}
+            onChange={setCurrency}
           />
         </div>
 
@@ -149,13 +166,14 @@ export function ShiftPayCalculator() {
           label="Night premium"
           checked={nightPremium}
           onChange={setNightPremium}
-          hint="Extra £ per hour for time worked inside a night window."
+          hint={`Extra ${symbol} per hour for time worked inside a night window.`}
         />
         {nightPremium ? (
           <div className="grid gap-4 sm:grid-cols-3">
             <CurrencyInput
               id="shift-night-rate"
               label="Night premium"
+              currency={currency}
               value={nightRate}
               onChange={setNightRate}
               suffix="per hour extra"
@@ -189,6 +207,7 @@ export function ShiftPayCalculator() {
             <CurrencyInput
               id="shift-weekend-rate"
               label="Weekend premium"
+              currency={currency}
               value={weekendRate}
               onChange={setWeekendRate}
               suffix="per hour extra"
@@ -251,7 +270,7 @@ export function ShiftPayCalculator() {
           title="Your shift"
           primary={{
             label: "Estimated gross shift pay",
-            value: formatPence(result.totalPence),
+            value: money(result.totalPence),
           }}
           rows={[
             {
@@ -266,12 +285,12 @@ export function ShiftPayCalculator() {
               label: "Paid hours",
               value: `${formatHoursMinutes(result.paidMinutes)} (${formatDecimalHours(result.paidMinutes)} hrs)`,
             },
-            { label: "Base pay", value: formatPence(result.basePayPence) },
+            { label: "Base pay", value: money(result.basePayPence) },
             ...(nightPremium
               ? [
                   {
                     label: `Night premium (${formatHoursMinutes(result.nightEligibleMinutes)})`,
-                    value: formatPence(result.nightPremiumPence),
+                    value: money(result.nightPremiumPence),
                   },
                 ]
               : []),
@@ -279,7 +298,7 @@ export function ShiftPayCalculator() {
               ? [
                   {
                     label: "Weekend premium",
-                    value: formatPence(result.weekendPremiumPence),
+                    value: money(result.weekendPremiumPence),
                   },
                 ]
               : []),
@@ -287,13 +306,13 @@ export function ShiftPayCalculator() {
               ? [
                   {
                     label: `Overtime uplift (${formatHoursMinutes(result.overtimeMinutes)})`,
-                    value: formatPence(result.overtimeUpliftPence),
+                    value: money(result.overtimeUpliftPence),
                   },
                 ]
               : []),
             {
               label: "Estimated total",
-              value: formatPence(result.totalPence),
+              value: money(result.totalPence),
               strong: true,
             },
           ]}

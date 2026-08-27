@@ -28,7 +28,7 @@ export interface OvertimeInput {
   mode: OvertimeMode;
   /** Multiplier of the standard rate, e.g. "1.5" (used in multiplier mode). */
   multiplier: string;
-  /** Explicit overtime £/hour (used in rate mode). */
+  /** Explicit overtime pay per hour (used in rate mode). */
   overtimeRate: string;
 }
 
@@ -53,7 +53,7 @@ export function calculateOvertime(
   }
   const rate = parseNumber(input.hourlyRate);
   if (rate === null || rate <= 0) {
-    return calcError("rate", "Hourly rate must be more than £0.");
+    return calcError("rate", "Hourly rate must be more than zero.");
   }
   const ratePence = poundsToPence(rate);
 
@@ -109,7 +109,7 @@ export function calculateOvertime(
     }
     const overtimeRate = parseNumber(input.overtimeRate);
     if (overtimeRate === null || overtimeRate <= 0) {
-      return calcError("overtimeRate", "Overtime rate must be more than £0.");
+      return calcError("overtimeRate", "Overtime rate must be more than zero.");
     }
     overtimeRatePence = poundsToPence(overtimeRate);
   }

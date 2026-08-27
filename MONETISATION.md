@@ -4,12 +4,29 @@ The site is wired for Google AdSense but ships with ad units **off** so pages
 stay clean until the account is approved and you deliberately switch them on.
 Everything is controlled from one file: `src/config/ads.ts`.
 
+## Account status
+
+Google AdSense is **under review** — no decision has been recorded either way.
+
+The verification setup is preserved and unchanged: the publisher client ID in
+`src/config/ads.ts`, `public/ads.txt` (served at `/ads.txt`) and the `<head>`
+script wiring in `src/app/layout.tsx`.
+
+`ADSENSE_ENABLED` was set to `false` on 2026-08-17 as a deliberate pause during
+a Google Safe Browsing review of the wider itisyou.app domain network: a
+forensic audit ranked "new domain + login flow + freshly-added AdSense" as the
+strongest combined trigger for the possible-phishing flag raised on
+`space.itisyou.app`. AdSense is deferred across the network until clean domain
+reputation is re-established and the review clears. Flipping the constant back
+to `true` and redeploying restores the script — the full reasoning is in the
+comment above it.
+
 ## Current state (as deployed)
 
 | Setting | Value | Effect |
 |---|---|---|
 | `ADSENSE_CLIENT_ID` | `ca-pub-4472252904102516` | Your publisher ID |
-| `ADSENSE_ENABLED` | `true` | AdSense bootstrap script loads in `<head>` on every page — this is what AdSense **site verification** checks, and it is all Auto ads needs |
+| `ADSENSE_ENABLED` | `false` (paused) | When `true`, the AdSense bootstrap script loads in `<head>` on every page — this is what AdSense **site verification** checks, and it is all Auto ads needs. Paused for the Safe Browsing review; see *Account status* above |
 | `AD_UNITS_ENABLED` | `false` | Manual ad placeholders render nothing |
 | `public/ads.txt` | `google.com, pub-4472252904102516, DIRECT, f08c47fec0942fa0` | Served at `/ads.txt`; AdSense's alternative verification method and required for full revenue eligibility |
 

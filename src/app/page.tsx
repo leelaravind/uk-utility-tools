@@ -25,7 +25,7 @@ export default function Home() {
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-muted">
           Free calculators and utilities for work, money, documents and
-          everyday life — built for the UK.
+          everyday life — open to everyone, wherever you are.
         </p>
         <p className="mt-3 inline-flex items-center gap-1.5 text-sm text-muted">
           <svg

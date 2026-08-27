@@ -53,6 +53,16 @@ export default function OvertimePage() {
       faqs={FAQS}
       explanation={
         <>
+          <h3>Currencies</h3>
+          <p>
+            Overtime pay is hours multiplied by a rate, so the arithmetic is
+            the same everywhere. Switch the calculator between{" "}
+            <strong>GBP (£), USD ($) and EUR (€)</strong> and only the symbol
+            changes — no exchange rate is applied and nothing is converted.
+            The worked example below is written in pounds but holds in any of
+            the three. The legal points on this page describe{" "}
+            <strong>UK</strong> law; overtime rules elsewhere differ.
+          </p>
           <h3>How the calculation works</h3>
           <p>
             The calculator splits your week into normal hours and overtime

@@ -5,10 +5,10 @@ import { useState } from "react";
 import {
   Button,
   CurrencyInput,
+  CurrencySelect,
   DateInput,
   NumberInput,
   ResultCard,
-  SelectInput,
   TextAreaInput,
   TextInput,
 } from "@/components/ui";
@@ -59,12 +59,6 @@ interface MetaState {
   taxRate: string;
   notes: string;
 }
-
-const CURRENCY_OPTIONS = [
-  { value: "GBP", label: "British pound (£)" },
-  { value: "EUR", label: "Euro (€)" },
-  { value: "USD", label: "US dollar ($)" },
-];
 
 const PRINT_CSS = `
 @page { size: A4; margin: 12mm; }
@@ -218,12 +212,11 @@ export function InvoiceIsland() {
               hint="Use a sequence that never repeats, e.g. INV-001, INV-002…"
               error={gated(errors.invoiceNumber)}
             />
-            <SelectInput
+            <CurrencySelect
               id="invoice-currency"
-              label="Currency"
               value={meta.currency}
-              onChange={(v) => patch({ currency: v as InvoiceCurrency })}
-              options={CURRENCY_OPTIONS}
+              onChange={(currency) => patch({ currency })}
+              hint="The currency this invoice is billed in. No conversion is applied."
             />
             <DateInput
               id="issue-date"

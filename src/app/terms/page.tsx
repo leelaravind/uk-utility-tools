@@ -7,7 +7,7 @@ export const metadata = pageMetadata({
   title:
     "Terms of Use",
   description:
-    "Terms of use for UK Utility Tools: all results are estimates for guidance only, not financial, tax, legal or immigration advice. Free service provided as-is.",
+    "Terms of use for ITISYOU Tools: all results are estimates for guidance only, not financial, tax, legal or immigration advice. Free service provided as-is.",
   path: "/terms",
 });
 

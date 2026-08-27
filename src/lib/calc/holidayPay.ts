@@ -63,7 +63,7 @@ export function calculateRegularHoliday(
   }
   const rate = parseNumber(input.hourlyRate);
   if (rate === null || rate <= 0) {
-    return calcError("rate", "Hourly rate must be more than £0.");
+    return calcError("rate", "Hourly rate must be more than zero.");
   }
 
   if (input.weeklyHours.trim() === "") {
@@ -143,7 +143,7 @@ export function calculateHolidayValue(
   }
   const rate = parseNumber(input.hourlyRate);
   if (rate === null || rate <= 0) {
-    return calcError("valueRate", "Hourly rate must be more than £0.");
+    return calcError("valueRate", "Hourly rate must be more than zero.");
   }
 
   if (input.amount.trim() === "") {
@@ -217,7 +217,7 @@ export function calculateIrregularHoliday(
   }
   const gross = parseNumber(input.grossPay);
   if (gross === null || gross < 0) {
-    return calcError("grossPay", "Gross pay must be £0 or more.");
+    return calcError("grossPay", "Gross pay must be zero or more.");
   }
 
   let accruedHoursExact: number | null = null;

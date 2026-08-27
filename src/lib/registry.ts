@@ -239,19 +239,24 @@ export const TOOLS: Tool[] = [
   },
   {
     slug: "job-answer",
-    title: "Job Application Answer Helper",
-    shortTitle: "Job Answers",
+    title: "Job Application Answer Builder",
+    shortTitle: "Answer Builder",
     description:
-      "Build structured answers to job application questions using STAR and other proven frameworks — no account, works offline.",
+      "Build tailored, structured answers to job application and interview questions — STAR and other proven frameworks, three variants, no account. Runs entirely in your browser.",
     category: "career",
     keywords: [
-      "job application answers",
-      "star method",
-      "star answer builder",
-      "interview answer helper",
+      "job application answer generator",
+      "interview answer builder",
+      "star interview answer",
+      "star method answer",
+      "competency answer examples",
+      "job application question answers",
+      "interview question answer helper",
+      "behavioural interview answers",
       "why do you want this job",
-      "competency question answers",
-      "application question help",
+      "tell me about yourself answer",
+      "application form answers",
+      "interview preparation",
     ],
     related: ["cv-match", "creator-tools"],
     icon: "message-square",
@@ -363,7 +368,7 @@ export const TOOLS: Tool[] = [
   },
 ];
 
-export const SITE_NAME = "UK Utility Tools";
+export const SITE_NAME = "ITISYOU Tools";
 export const SITE_URL = "https://tools.itisyou.app";
 export const SITE_TAGLINE = "Useful tools. No account required.";
 export const SITE_DESCRIPTION =

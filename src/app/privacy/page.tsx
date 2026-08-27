@@ -7,7 +7,7 @@ export const metadata = pageMetadata({
   title:
     "Privacy Policy",
   description:
-    "How UK Utility Tools handles your data: everything runs in your browser, nothing is uploaded, no accounts and no analytics. Plain-English privacy policy.",
+    "How ITISYOU Tools handles your data: everything runs in your browser, nothing is uploaded, no accounts and no analytics. Plain-English privacy policy.",
   path: "/privacy",
 });
 

@@ -4,9 +4,24 @@
  * All money maths runs in integer minor units (pence/cents) so rounding
  * is explicit and deterministic. Nothing here touches the DOM, storage
  * or the clock — dates come in as strings from the form.
+ *
+ * Money is rendered through the shared currency helpers in `@/lib/currency`
+ * so an invoice shows the same symbols as the rest of the site.
  */
 
-export type InvoiceCurrency = "GBP" | "EUR" | "USD";
+import {
+  formatCurrency,
+  formatCurrencyFromMinor,
+  type SupportedCurrency,
+} from "@/lib/currency";
+
+/**
+ * An invoice is priced in one of the site's supported currencies. This is an
+ * alias rather than its own union so invoices can never drift away from the
+ * shared currency list — and so invoice money is formatted by exactly the
+ * same code as every calculator.
+ */
+export type InvoiceCurrency = SupportedCurrency;
 
 export interface InvoiceParty {
   name: string;
@@ -75,15 +90,19 @@ export function computeInvoiceTotals(
   return { lineTotals, subtotal, taxAmount, total: subtotal + taxAmount };
 }
 
-/** Format an amount in minor units, e.g. 123456 → "£1,234.56". */
+/**
+ * Format an amount in minor units, e.g. 123456 → "£1,234.56".
+ *
+ * Delegates to the shared formatter. This matters on a document a client
+ * actually reads: `Intl`'s currency style under `en-GB` renders USD as
+ * "US$1,234.56", which is wrong on an invoice — "$1,234.56" is what a
+ * dollar-priced invoice should say.
+ */
 export function formatMoney(
   minorUnits: number,
   currency: InvoiceCurrency,
 ): string {
-  return new Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency,
-  }).format(minorUnits / 100);
+  return formatCurrencyFromMinor(minorUnits, currency);
 }
 
 /**
@@ -94,12 +113,10 @@ export function formatUnitPrice(
   unitPrice: number,
   currency: InvoiceCurrency,
 ): string {
-  return new Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency,
+  return formatCurrency(unitPrice, currency, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 4,
-  }).format(unitPrice);
+  });
 }
 
 /**

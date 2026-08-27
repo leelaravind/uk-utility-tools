@@ -137,8 +137,8 @@ describe("formatMoney", () => {
     expect(formatMoney(123456, "EUR")).toBe("€1,234.56");
   });
 
-  it("formats USD (en-GB uses the US$ prefix)", () => {
-    expect(formatMoney(123456, "USD")).toBe("US$1,234.56");
+  it("formats USD with a plain dollar sign, never the US$ prefix", () => {
+    expect(formatMoney(123456, "USD")).toBe("$1,234.56");
   });
 
   it("formats zero and single-penny amounts", () => {

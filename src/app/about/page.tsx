@@ -7,7 +7,7 @@ export const metadata = pageMetadata({
   title:
     "About",
   description:
-    "What UK Utility Tools is: free, privacy-first calculators and browser utilities for work, money, documents and everyday tasks. No accounts, no uploads.",
+    "What ITISYOU Tools is: free, privacy-first calculators and browser utilities for work, money, documents and everyday tasks. No accounts, no uploads.",
   path: "/about",
 });
 
@@ -35,10 +35,15 @@ export default function AboutPage() {
         a phone as well as a desktop.
       </p>
       <p className={paragraph}>
-        Everything is built for the UK first: salary estimates use UK tax
-        concepts, holiday pay follows the UK&rsquo;s 5.6-week statutory
-        approach, and the wording is plain UK English. All figures are
-        estimates for guidance — not financial, legal or immigration advice.
+        The platform is global: most tools — hours, overtime, PDFs,
+        images, QR codes, invoices and the career helpers — work the same
+        wherever you are. A few are deliberately UK-specific because they
+        implement UK rules: salary estimates use UK income tax, National
+        Insurance and student loan bands, and holiday pay follows the
+        UK&rsquo;s 5.6-week statutory approach. Those tools say so in their
+        name or description. Everything is written in plain British
+        English, and all figures are estimates for guidance — not
+        financial, legal or immigration advice.
       </p>
 
       <h2 className={sectionHeading}>Who it&rsquo;s for</h2>

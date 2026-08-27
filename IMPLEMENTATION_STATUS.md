@@ -1,6 +1,28 @@
 # Implementation Status
 
-Last updated: 2026-08-16
+Last updated: 2026-08-27
+
+## Branding and scope
+
+The platform identity is **ITISYOU Tools** and the platform is global. Some
+calculators remain UK-specific because they implement UK law — UK income tax,
+National Insurance, student loan plans, Scottish bands and the 5.6-week
+statutory holiday rules — and those keep their UK terminology and are labelled
+as UK tools in the registry. Site-wide strings carry no UK-only positioning.
+
+A shared currency module (`src/lib/currency.ts`) supports GBP, USD and EUR for
+tools whose maths is currency-neutral; UK-tax-specific tools stay GBP-only
+because their bands and thresholds are defined in pounds.
+
+## Search and monetisation status
+
+- **Google Search Console**: verified — the property is collecting clicks.
+- **Google AdSense**: under review; no decision either way. The verification
+  setup is preserved (publisher client ID, `public/ads.txt`, the `<head>`
+  script wiring in `src/app/layout.tsx`). `ADSENSE_ENABLED` is currently
+  `false` — a deliberate pause during a Google Safe Browsing review of the
+  wider itisyou.app domain network, documented in the comment above the
+  constant in `src/config/ads.ts`.
 
 ## Deployment
 
@@ -23,7 +45,7 @@ Last updated: 2026-08-16
 | Credit Card Payoff Calculator | `/credit-card` | `src/lib/calc/creditCard.ts` | ✅ |
 | Visa Date / Countdown Calculator | `/visa-dates` | `src/lib/career/visaDates.ts` (+ .ics export) | ✅ |
 | CV ↔ Job Description Match Checker | `/cv-match` | `src/lib/career/cvMatch.ts` (fully local) | ✅ |
-| Job Application Answer Helper | `/job-answer` | `src/lib/career/jobAnswer.ts` (templates, not AI) | ✅ |
+| Job Application Answer Builder | `/job-answer` | `src/lib/career/jobAnswer.ts` (templates, not AI) | ✅ |
 | Image Compressor / Resizer | `/image-tools` | `src/lib/files/imageProcessing.ts` (canvas, on-device) | ✅ |
 | PDF Merge / Split / Reorder | `/pdf-tools` | `src/lib/files/pdfUtils.ts` (pdf-lib, on-device, lazy-loaded) | ✅ |
 | QR Code Generator | `/qr` | `src/lib/files/qrPayload.ts` (qrcode, lazy-loaded) | ✅ |
@@ -60,7 +82,7 @@ Items to re-verify in future:
 - CV match is a keyword-coverage approximation, not a real ATS (disclosed).
 - Mobile layout is built mobile-first with Tailwind and passed static review; automated real-device testing was not run (browser-extension window could not be resized below desktop width).
 - No E2E test suite (Playwright) yet — unit tests + live manual verification cover current scope.
-- `/contact` email (`hello@itisyou.app`) is a placeholder constant — no mailbox was configured as part of this project.
+- `/contact` publishes `support@itisyou.app` as the public support address. Whether a mailbox is actually provisioned for it was not verified as part of this project — confirm delivery before relying on it.
 
 ## Future upgrades (architecture ready)
 

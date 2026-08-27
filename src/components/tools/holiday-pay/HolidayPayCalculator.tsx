@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import {
   Button,
   CurrencyInput,
+  CurrencySelect,
   NumberInput,
   ResultCard,
   SelectInput,
@@ -15,7 +16,9 @@ import {
   calculateIrregularHoliday,
   calculateRegularHoliday,
 } from "@/lib/calc/holidayPay";
-import { formatHoursNumber, formatPence } from "@/lib/calc/workingHours";
+import { formatHoursNumber } from "@/lib/calc/workingHours";
+import { formatCurrencyFromMinor } from "@/lib/currency";
+import { useCurrencyPreference } from "@/lib/useCurrencyPreference";
 
 const UNIT_OPTIONS = [
   { value: "days", label: "days" },
@@ -23,6 +26,7 @@ const UNIT_OPTIONS = [
 ];
 
 export function HolidayPayCalculator() {
+  const [currency, setCurrency] = useCurrencyPreference();
   const [mode, setMode] = useState<"regular" | "irregular">("regular");
 
   // Regular hours mode
@@ -60,6 +64,13 @@ export function HolidayPayCalculator() {
     [grossPay, hoursWorked],
   );
 
+  /**
+   * Money display only. The ENTITLEMENT rules this tool implements (5.6
+   * weeks, the 28-day cap, 12.07% accrual) are UK statutory law and do not
+   * change with the currency — see the note beneath the controls.
+   */
+  const money = (pence: number) => formatCurrencyFromMinor(pence, currency);
+
   const regularError = (field: string): string | undefined =>
     !regular.ok && !regular.incomplete && regular.field === field
       ? regular.message
@@ -96,21 +107,40 @@ export function HolidayPayCalculator() {
         </Button>
       </div>
 
+      <p className="rounded-card border border-border bg-surface-subtle p-4 text-sm leading-relaxed text-muted">
+        <strong className="text-foreground">
+          This estimator applies UK statutory holiday law.
+        </strong>{" "}
+        The 5.6 weeks minimum, the 28-day cap and the 12.07% accrual rate come
+        from the Working Time Regulations and apply to workers in the United
+        Kingdom. You can display the money in another currency for
+        convenience, but that does <strong>not</strong> make the entitlement
+        rules apply outside the UK — holiday entitlement elsewhere is set by
+        that country&apos;s own law and your contract.
+      </p>
+
       {mode === "regular" ? (
         <>
           <div className="flex flex-col gap-5 rounded-card border border-border bg-surface p-5 shadow-card sm:p-6">
             <h2 className="text-lg font-semibold text-foreground">
               Your working pattern
             </h2>
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2">
               <CurrencyInput
                 id="hol-rate"
                 label="Hourly rate"
+                currency={currency}
                 value={hourlyRate}
                 onChange={setHourlyRate}
                 suffix="per hour"
                 placeholder="12.71"
                 error={regularError("rate")}
+              />
+              <CurrencySelect
+                id="hol-currency"
+                value={currency}
+                onChange={setCurrency}
+                hint="Display only — the entitlement rules below stay UK statutory."
               />
               <NumberInput
                 id="hol-weekly-hours"
@@ -138,7 +168,7 @@ export function HolidayPayCalculator() {
           {regular.ok ? (
             <ResultCard
               live
-              title="Statutory minimum (5.6 weeks)"
+              title="UK statutory minimum (5.6 weeks)"
               primary={{
                 label: "Estimated annual holiday entitlement",
                 value: `${formatHoursNumber(regular.entitlementHours)} hours`,
@@ -156,11 +186,11 @@ export function HolidayPayCalculator() {
                 },
                 {
                   label: "Estimated value at your rate",
-                  value: formatPence(regular.entitlementPayPence),
+                  value: money(regular.entitlementPayPence),
                   strong: true,
                 },
               ]}
-              footnote="5.6 weeks × your working pattern, capped at 28 days. Bank holidays can count towards this minimum, and your contract may give you more."
+              footnote="UK statutory rule: 5.6 weeks × your working pattern, capped at 28 days. Bank holidays can count towards this minimum, and your contract may give you more. The entitlement is UK law whatever currency the value is shown in."
             />
           ) : (
             <div
@@ -219,7 +249,7 @@ export function HolidayPayCalculator() {
                   </span>{" "}
                   ≈{" "}
                   <span className="font-semibold text-foreground">
-                    {formatPence(quickValue.payPence)}
+                    {money(quickValue.payPence)}
                   </span>{" "}
                   gross
                 </>
@@ -240,18 +270,26 @@ export function HolidayPayCalculator() {
               Your recent earnings
             </h2>
             <p className="text-sm text-muted">
-              For irregular-hours and part-year workers, holiday builds up at{" "}
-              {ACCRUAL_PERCENT}% of the hours you work in each pay period.
+              Under UK law, irregular-hours and part-year workers build up
+              holiday at {ACCRUAL_PERCENT}% of the hours they work in each pay
+              period.
             </p>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-3">
               <CurrencyInput
                 id="hol-gross"
                 label="Gross pay in the period"
+                currency={currency}
                 value={grossPay}
                 onChange={setGrossPay}
                 placeholder="1,200"
                 hint="Wages before tax for the period — e.g. the last month."
                 error={irregularError("grossPay")}
+              />
+              <CurrencySelect
+                id="hol-currency-irregular"
+                value={currency}
+                onChange={setCurrency}
+                hint="Display only — the 12.07% rule below stays UK statutory."
               />
               <NumberInput
                 id="hol-hours-worked"
@@ -269,10 +307,10 @@ export function HolidayPayCalculator() {
           {irregular.ok ? (
             <ResultCard
               live
-              title={`${ACCRUAL_PERCENT}% accrual`}
+              title={`UK statutory ${ACCRUAL_PERCENT}% accrual`}
               primary={{
                 label: "Estimated accrued holiday pay",
-                value: formatPence(irregular.accruedPayPence),
+                value: money(irregular.accruedPayPence),
               }}
               rows={[
                 {

@@ -1,11 +1,28 @@
-# UK Utility Tools
+# ITISYOU Tools
 
-A premium, privacy-first collection of free UK web tools — pay and hours
+A premium, privacy-first collection of free web tools — pay and hours
 calculators, money estimators, career helpers, PDF/image utilities, QR codes,
 invoices and creator helpers. No accounts, no uploads, no analytics: every
 tool runs entirely in the visitor's browser.
 
 Live site: https://tools.itisyou.app
+
+## Branding and scope
+
+**ITISYOU Tools** is the platform identity and the platform is global —
+anyone, anywhere can use it. Individual calculators may still be UK-specific
+because they implement UK law (income tax, National Insurance, student loan
+plans, Scottish bands, the 5.6-week statutory holiday rules). Those tools keep
+their UK terminology and are labelled as UK tools in their registry title or
+description; the site-wide strings (`SITE_NAME`, `SITE_TAGLINE`,
+`SITE_DESCRIPTION` in `src/lib/registry.ts`) carry no UK-only positioning.
+
+A shared currency module (`src/lib/currency.ts`) provides GBP, USD and EUR for
+tools whose maths is currency-neutral — changing currency changes presentation
+only. Tools that implement UK tax rules stay GBP-only, because their bands and
+thresholds are defined in pounds.
+
+Public contact address: `support@itisyou.app` (shown on `/contact`).
 
 ## Architecture
 
@@ -114,12 +131,25 @@ permissions policy, frame denial) to every response.
   https://dash.cloudflare.com/profile/api-tokens. Until that secret exists,
   the deploy step fails and deploys remain manual (`npx wrangler deploy`).
 
+### Search and indexing
+
+`sitemap.xml` and `robots.txt` are generated at build time from the registry,
+so every tool route is listed automatically. Google Search Console is
+**verified for the property and collecting clicks**.
+
 ### Monetisation
 
 Ad architecture is config-driven from `src/config/ads.ts` (AdSense script
 in `<head>`, three dormant `AdSlot` placeholders per tool page,
 `public/ads.txt`). See `MONETISATION.md` for the enable checklist,
 including the UK/EEA consent requirement.
+
+Google AdSense status: **under review** — no decision either way. The
+verification setup is preserved (publisher client ID, `public/ads.txt`, the
+`<head>` script wiring), but `ADSENSE_ENABLED` is currently `false`: a
+deliberate pause during a Google Safe Browsing review of the wider
+itisyou.app domain network. The reasoning is documented in the comment above
+the constant in `src/config/ads.ts`.
 
 ## Privacy architecture
 
@@ -136,6 +166,22 @@ Privacy is structural, not a policy promise:
   does — server logs only, nothing added by us.
 
 See `/privacy` on the site for the user-facing version.
+
+## Job Answer content maintenance
+
+`/job-answer` composes drafts from a tagged corpus of 746 human-written
+sentence blocks under `src/data/jobAnswers/`, selected by a deterministic
+engine in `src/lib/career/jobAnswer/`. It is **not** an AI model, calls no
+external service, and the UI must never describe it as AI-generated.
+
+Content is added by appending a tagged block to the themed file matching its
+role — never by editing one large file. The corpus contains no digits at all,
+by rule and by test, so the builder cannot invent a metric, a team size or an
+achievement; missing detail becomes a bracketed prompt for the visitor's own
+figure instead.
+
+Full contributor guide, including how to add question types, industries,
+roles, skills, tones and frameworks: **`JOB_ANSWER_ARCHITECTURE.md`**.
 
 ## Tax configuration maintenance
 

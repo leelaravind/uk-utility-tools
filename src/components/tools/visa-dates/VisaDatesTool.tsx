@@ -94,7 +94,7 @@ export function VisaDatesTool() {
           date: expiryDate,
           title: "Visa expiry date",
           description:
-            "Visa expiry date entered in the UK Utility Tools visa date calculator. Check the exact date on your BRP/eVisa and official UKVI guidance well before today.",
+            "Visa expiry date entered in the ITISYOU Tools visa date calculator. Check the exact date on your BRP/eVisa and official UKVI guidance well before today.",
         },
       ],
       new Date()
@@ -113,7 +113,7 @@ export function VisaDatesTool() {
               ? `Visa reminder — ${plural(reminderDaysBefore, "day")} until expiry`
               : "Visa reminder",
           description:
-            "Reminder created with the UK Utility Tools visa date calculator. Check renewal or extension options on the official UKVI website.",
+            "Reminder created with the ITISYOU Tools visa date calculator. Check renewal or extension options on the official UKVI website.",
         },
       ],
       new Date()

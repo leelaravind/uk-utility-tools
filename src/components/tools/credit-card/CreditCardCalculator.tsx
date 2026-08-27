@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import {
   Button,
   CurrencyInput,
+  CurrencySelect,
   NumberInput,
   ResultCard,
 } from "@/components/ui";
@@ -16,19 +17,20 @@ import {
   type PayoffResult,
   type RequiredPaymentResult,
 } from "@/lib/calc/creditCard";
-import { formatGBP } from "@/lib/calc/salary";
+import {
+  formatCurrency,
+  formatCurrencyFromMinor,
+  type SupportedCurrency,
+} from "@/lib/currency";
+import { useCurrencyPreference } from "@/lib/useCurrencyPreference";
 
 type Mode = "payment" | "target";
 
 function parseAmount(raw: string): number | null {
-  const cleaned = raw.replace(/[£,\s]/g, "");
+  const cleaned = raw.replace(/[£$€,\s]/g, "");
   if (cleaned === "") return null;
   const n = Number(cleaned);
   return Number.isFinite(n) ? n : null;
-}
-
-function pence(p: number): string {
-  return formatGBP(p / 100);
 }
 
 function formatDuration(months: number): string {
@@ -47,15 +49,26 @@ function formatPayoffMonth(isoMonth: string): string {
   });
 }
 
+/**
+ * Format an amount held in minor units (pence/cents) in the chosen currency.
+ * The amortisation maths is pure arithmetic on integers, so the currency only
+ * ever changes the symbol in front of the digits — nothing is converted.
+ */
+function money(minorUnits: number, currency: SupportedCurrency): string {
+  return formatCurrencyFromMinor(minorUnits, currency);
+}
+
 /** Inline SVG line of balance over time — no chart library. */
 function BalanceChart({
   startBalancePence,
   schedule,
   months,
+  currency,
 }: {
   startBalancePence: number;
   schedule: AmortisationRow[];
   months: number;
+  currency: SupportedCurrency;
 }) {
   const width = 400;
   const height = 140;
@@ -97,18 +110,25 @@ function BalanceChart({
         />
       </svg>
       <p className="sr-only">
-        Chart alternative: the balance falls from {pence(startBalancePence)} to
-        zero over {formatDuration(months)}.
+        Chart alternative: the balance falls from{" "}
+        {money(startBalancePence, currency)} to zero over{" "}
+        {formatDuration(months)}.
       </p>
       <p className="mt-1 text-xs text-muted">
-        Balance falling from {pence(startBalancePence)} to £0 over{" "}
-        {formatDuration(months)}.
+        Balance falling from {money(startBalancePence, currency)} to{" "}
+        {formatCurrency(0, currency)} over {formatDuration(months)}.
       </p>
     </div>
   );
 }
 
-function ScheduleTable({ schedule }: { schedule: AmortisationRow[] }) {
+function ScheduleTable({
+  schedule,
+  currency,
+}: {
+  schedule: AmortisationRow[];
+  currency: SupportedCurrency;
+}) {
   return (
     <details className="rounded-card border border-border bg-surface p-4">
       <summary className="cursor-pointer text-sm font-semibold text-foreground">
@@ -132,16 +152,16 @@ function ScheduleTable({ schedule }: { schedule: AmortisationRow[] }) {
                   {row.month}
                 </td>
                 <td className="py-1.5 pr-4 text-right tabular-nums text-foreground">
-                  {pence(row.paymentPence)}
+                  {money(row.paymentPence, currency)}
                 </td>
                 <td className="py-1.5 pr-4 text-right tabular-nums text-foreground">
-                  {pence(row.interestPence)}
+                  {money(row.interestPence, currency)}
                 </td>
                 <td className="py-1.5 pr-4 text-right tabular-nums text-foreground">
-                  {pence(row.principalPence)}
+                  {money(row.principalPence, currency)}
                 </td>
                 <td className="py-1.5 text-right tabular-nums text-foreground">
-                  {pence(row.balancePence)}
+                  {money(row.balancePence, currency)}
                 </td>
               </tr>
             ))}
@@ -153,6 +173,7 @@ function ScheduleTable({ schedule }: { schedule: AmortisationRow[] }) {
 }
 
 export function CreditCardCalculator() {
+  const [currency, setCurrency] = useCurrencyPreference();
   const [mode, setMode] = useState<Mode>("payment");
   const [balance, setBalance] = useState("");
   const [apr, setApr] = useState("");
@@ -250,6 +271,7 @@ export function CreditCardCalculator() {
           <CurrencyInput
             id="cc-balance"
             label="Card balance"
+            currency={currency}
             value={balance}
             onChange={setBalance}
             error={balanceError}
@@ -269,6 +291,7 @@ export function CreditCardCalculator() {
             <CurrencyInput
               id="cc-payment"
               label="Monthly payment"
+              currency={currency}
               value={payment}
               onChange={setPayment}
               error={paymentError}
@@ -286,6 +309,11 @@ export function CreditCardCalculator() {
               inputMode="numeric"
             />
           )}
+          <CurrencySelect
+            id="cc-currency"
+            value={currency}
+            onChange={setCurrency}
+          />
         </div>
       </div>
 
@@ -307,14 +335,14 @@ export function CreditCardCalculator() {
                 <>
                   Interest alone is{" "}
                   <strong className="text-foreground">
-                    {pence(result.firstMonthInterestPence)}
+                    {money(result.firstMonthInterestPence, currency)}
                   </strong>{" "}
                   in the first month.{" "}
                 </>
               ) : null}
               You would need at least{" "}
               <strong className="text-foreground">
-                {pence(result.suggestedMonthlyPence)}
+                {money(result.suggestedMonthlyPence, currency)}
               </strong>{" "}
               a month to clear the balance within {MAX_MONTHS / 12} years —
               and considerably more to clear it quickly.
@@ -338,7 +366,7 @@ export function CreditCardCalculator() {
                     label: "Monthly payment needed",
                     value:
                       result.monthlyPaymentPence !== undefined
-                        ? pence(result.monthlyPaymentPence)
+                        ? money(result.monthlyPaymentPence, currency)
                         : "—",
                   }
             }
@@ -357,28 +385,29 @@ export function CreditCardCalculator() {
               },
               {
                 label: "Total you would pay",
-                value: pence(result.totalPaidPence),
+                value: money(result.totalPaidPence, currency),
               },
               {
                 label: "Total interest",
-                value: pence(result.totalInterestPence),
+                value: money(result.totalInterestPence, currency),
                 strong: true,
               },
               {
                 label: "Final payment",
-                value: pence(result.finalPaymentPence),
+                value: money(result.finalPaymentPence, currency),
               },
             ]}
-            footnote="Illustrative estimate only. Your card issuer may calculate interest differently (most compound daily and charge fees), so real figures will vary."
+            footnote="Illustrative amortisation only, not country-specific advice. The maths is the same in any currency, but how interest is charged and how card lending is regulated differ from country to country — most issuers compound daily and add fees — so your real statements will vary."
           >
             <BalanceChart
               startBalancePence={startBalancePence}
               schedule={result.schedule}
               months={result.months}
+              currency={currency}
             />
           </ResultCard>
 
-          <ScheduleTable schedule={result.schedule} />
+          <ScheduleTable schedule={result.schedule} currency={currency} />
         </>
       )}
     </div>

@@ -53,6 +53,26 @@ export default function HolidayPayPage() {
       faqs={FAQS}
       explanation={
         <>
+          <h3>These are UK statutory rules</h3>
+          <p>
+            Everything on this page — the 5.6 weeks minimum, the 28-day cap
+            and the 12.07% accrual rate — comes from the{" "}
+            <strong>Working Time Regulations 1998</strong> and applies to
+            workers in the United Kingdom. Holiday entitlement in other
+            countries is set by their own law and by your contract, and is
+            frequently different.
+          </p>
+          <p>
+            The calculator lets you display the money in{" "}
+            <strong>GBP (£), USD ($) or EUR (€)</strong> because a rate ×
+            hours calculation is currency-neutral, and plenty of people in the
+            UK think in another currency. Changing the symbol is a display
+            choice only: no exchange rate is applied, no figure changes, and{" "}
+            <strong>
+              it does not make the UK entitlement rules apply outside the UK
+            </strong>
+            .
+          </p>
           <h3>The 5.6 weeks rule (regular hours)</h3>
           <p>
             UK statutory holiday is <strong>5.6 weeks a year</strong>, scaled

@@ -70,6 +70,24 @@ export default function SelfEmployedPage() {
             selected) to show an illustrative post-tax figure.
           </p>
 
+          <h3>Two halves, and only one of them travels</h3>
+          <p>
+            <strong>Profit is currency-neutral.</strong> Revenue minus
+            allowable expenses is the same subtraction whatever the money is
+            called, so you can run the profit side in{" "}
+            <strong>GBP (£), USD ($) or EUR (€)</strong>. Nothing is converted
+            and no exchange rate is used — only the symbol changes.
+          </p>
+          <p>
+            <strong>The tax estimate is not.</strong> The personal allowance,
+            the income tax bands and the Class 4 and Class 2 National
+            Insurance thresholds are specific amounts of sterling set by UK
+            law. They cannot be applied to another currency by changing the
+            symbol in front of them, so selecting USD or EUR switches the UK
+            tax estimate off and the calculator shows profit only. Switch back
+            to GBP to see the tax figures — which are always displayed in
+            pounds.
+          </p>
           <h3>The illustrative tax estimate</h3>
           <ul>
             <li>

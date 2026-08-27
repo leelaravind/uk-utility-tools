@@ -31,7 +31,7 @@ const FAQS = [
   {
     question: "Does the calculator handle 0% interest cards?",
     answer:
-      "Yes — with a 0% APR the maths is exact: months to clear is simply the balance divided by your monthly payment, with a smaller final payment for any remainder, and total interest is £0. This is useful for planning repayments within a 0% balance-transfer promotional window.",
+      "Yes — with a 0% APR the maths is exact: months to clear is simply the balance divided by your monthly payment, with a smaller final payment for any remainder, and total interest is zero. This is useful for planning repayments within a 0% balance-transfer promotional window.",
   },
   {
     question: "Is extra spending on the card included?",
@@ -59,6 +59,24 @@ export default function CreditCardPage() {
             verifies the answer by running the same simulation.
           </p>
 
+          <h3>Currencies, and what this tool is not</h3>
+          <p>
+            Amortisation is arithmetic, not law: the same balance, APR and
+            payment produce the same schedule whatever the money is called, so
+            you can switch between <strong>GBP (£), USD ($) and EUR (€)</strong>{" "}
+            and only the symbol changes. Nothing is converted and no exchange
+            rate is used.
+          </p>
+          <p>
+            That is also the limit of the tool. <strong>How interest is
+            charged and how card lending is regulated differ from country to
+            country</strong> — minimum-payment rules, promotional-rate
+            protections, how APR itself is defined and disclosed, grace
+            periods, fees and persistent-debt interventions are all
+            jurisdiction-specific. This is an illustrative amortisation for
+            planning, not country-specific financial or debt advice; check
+            your own card agreement and your national regulator&apos;s rules.
+          </p>
           <h3>The monthly interest model</h3>
           <p>
             Each month, interest is added at the monthly rate (APR ÷ 12), then
@@ -70,7 +88,8 @@ export default function CreditCardPage() {
             <li>new balance = balance + interest − payment</li>
           </ul>
           <p>
-            All arithmetic is done in whole pence, and the final month&apos;s
+            All arithmetic is done in whole minor units (pence or cents),
+            and the final month&apos;s
             payment is reduced to exactly clear the balance. Card issuers
             usually compound interest daily and apply payments on statement
             dates, so real statements will differ slightly — the shape and

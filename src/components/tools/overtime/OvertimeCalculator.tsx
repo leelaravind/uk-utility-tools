@@ -4,12 +4,15 @@ import { useMemo, useState } from "react";
 
 import {
   CurrencyInput,
+  CurrencySelect,
   NumberInput,
   ResultCard,
   SelectInput,
 } from "@/components/ui";
 import { calculateOvertime, type OvertimeMode } from "@/lib/calc/overtime";
-import { formatHoursNumber, formatPence } from "@/lib/calc/workingHours";
+import { formatHoursNumber } from "@/lib/calc/workingHours";
+import { formatCurrencyFromMinor } from "@/lib/currency";
+import { useCurrencyPreference } from "@/lib/useCurrencyPreference";
 
 const MODE_OPTIONS = [
   { value: "multiplier", label: "Multiplier of my normal rate (e.g. 1.5×)" },
@@ -25,6 +28,7 @@ const MULTIPLIER_OPTIONS = [
 ];
 
 export function OvertimeCalculator() {
+  const [currency, setCurrency] = useCurrencyPreference();
   const [hourlyRate, setHourlyRate] = useState("");
   const [standardWeeklyHours, setStandardWeeklyHours] = useState("37.5");
   const [actualHours, setActualHours] = useState("");
@@ -35,6 +39,13 @@ export function OvertimeCalculator() {
 
   const multiplier =
     multiplierChoice === "custom" ? customMultiplier : multiplierChoice;
+
+  /**
+   * Single funnel for every money string here. Overtime pay is hours × rate,
+   * which is the same arithmetic in any currency — the selector changes the
+   * symbol only, and never converts between currencies.
+   */
+  const money = (pence: number) => formatCurrencyFromMinor(pence, currency);
 
   const result = useMemo(
     () =>
@@ -58,15 +69,21 @@ export function OvertimeCalculator() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-5 rounded-card border border-border bg-surface p-5 shadow-card sm:p-6">
         <h2 className="text-lg font-semibold text-foreground">Your week</h2>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2">
           <CurrencyInput
             id="ot-rate"
             label="Standard hourly rate"
+            currency={currency}
             value={hourlyRate}
             onChange={setHourlyRate}
             suffix="per hour"
             placeholder="12.50"
             error={fieldError("rate")}
+          />
+          <CurrencySelect
+            id="ot-currency"
+            value={currency}
+            onChange={setCurrency}
           />
           <NumberInput
             id="ot-standard"
@@ -118,6 +135,7 @@ export function OvertimeCalculator() {
             <CurrencyInput
               id="ot-explicit-rate"
               label="Overtime hourly rate"
+              currency={currency}
               value={overtimeRate}
               onChange={setOvertimeRate}
               suffix="per hour"
@@ -145,7 +163,7 @@ export function OvertimeCalculator() {
           title="This week"
           primary={{
             label: "Estimated gross weekly pay",
-            value: formatPence(result.totalPence),
+            value: money(result.totalPence),
           }}
           rows={[
             {
@@ -158,16 +176,16 @@ export function OvertimeCalculator() {
             },
             {
               label: "Overtime rate",
-              value: `${formatPence(result.overtimeRatePence)}/hour`,
+              value: `${money(result.overtimeRatePence)}/hour`,
             },
-            { label: "Normal pay", value: formatPence(result.normalPayPence) },
+            { label: "Normal pay", value: money(result.normalPayPence) },
             {
               label: "Overtime pay",
-              value: formatPence(result.overtimePayPence),
+              value: money(result.overtimePayPence),
             },
             {
               label: "Estimated total",
-              value: formatPence(result.totalPence),
+              value: money(result.totalPence),
               strong: true,
             },
           ]}

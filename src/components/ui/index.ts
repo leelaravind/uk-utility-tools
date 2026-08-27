@@ -12,6 +12,9 @@ export type { NumberInputProps } from "./NumberInput";
 export { CurrencyInput } from "./CurrencyInput";
 export type { CurrencyInputProps } from "./CurrencyInput";
 
+export { CurrencySelect } from "./CurrencySelect";
+export type { CurrencySelectProps } from "./CurrencySelect";
+
 export { TimeInput } from "./TimeInput";
 export type { TimeInputProps } from "./TimeInput";
 

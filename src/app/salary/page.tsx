@@ -117,6 +117,18 @@ export default function SalaryPage() {
             All rates below are read from the same verified configuration the
             calculator uses.
           </p>
+          <p>
+            <strong>This calculator is UK-only, and therefore GBP-only.</strong>{" "}
+            Unlike our currency-neutral tools, it is built entirely out of UK
+            law — income tax bands, the personal allowance and its taper,
+            employee National Insurance and the student loan plan thresholds
+            are fixed amounts of sterling set by HMRC. Those figures cannot be
+            applied to another country by changing the currency symbol in front
+            of them, so there is no USD or EUR option here: an answer in
+            dollars or euros would look precise and be wrong. For take-home pay
+            elsewhere, use a calculator built for that country&apos;s tax
+            system.
+          </p>
 
           <h3>Income tax bands — England, Wales &amp; Northern Ireland ({defaultYear.id})</h3>
           <p>
