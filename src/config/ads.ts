@@ -15,7 +15,18 @@
 
 export const ADSENSE_CLIENT_ID = "ca-pub-4472252904102516";
 
-/** Loads the AdSense script in <head> on every page (verification + Auto ads). */
+/**
+ * Loads the AdSense script in <head> on every page (verification + Auto ads).
+ *
+ * TEMPORARILY DISABLED 2026-08-17 for the Google Safe Browsing review of the
+ * itisyou.app domain network. The forensic audit ranked "new domain + login
+ * flow + freshly-added AdSense" as the strongest combined trigger for the
+ * "possible phishing on user login" flag on space.itisyou.app. AdSense is
+ * deferred across the network until clean domain reputation is re-established
+ * and the review is cleared; the client ID and all config below are preserved
+ * for reuse — flip this back to `true` and redeploy to restore monetisation.
+ * See F:\Meditation\docs\records\GOOGLE-PHISHING-REVIEW-READINESS-2026-08-17.md.
+ */
 export const ADSENSE_ENABLED = true;
 
 /** Renders manual ad units inside AdSlot placeholders (needs slot IDs below). */
