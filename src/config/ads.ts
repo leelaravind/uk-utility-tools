@@ -30,7 +30,7 @@ export const ADSENSE_CLIENT_ID = "ca-pub-4472252904102516";
 export const ADSENSE_ENABLED = true;
 
 /** Renders manual ad units inside AdSlot placeholders (needs slot IDs below). */
-export const AD_UNITS_ENABLED = false;
+export const AD_UNITS_ENABLED = true;
 
 export type AdSlotPosition = "after-input" | "after-explanation" | "before-related";
 
@@ -40,7 +40,11 @@ export type AdSlotPosition = "after-input" | "after-explanation" | "before-relat
  * data-ad-slot value here. Positions with an empty string render nothing.
  */
 export const AD_SLOT_IDS: Record<AdSlotPosition, string> = {
-  "after-input": "",
-  "after-explanation": "",
-  "before-related": "",
+  // The "tools" display unit. One unit is reused across positions deliberately: a single
+  // responsive unit placed after the content a visitor came for, rather than three
+  // separate units competing with the tool itself. Give a position its own id here when
+  // there is a reason to measure it separately.
+  "after-input": "5908390611",
+  "after-explanation": "5908390611",
+  "before-related": "5908390611",
 };
